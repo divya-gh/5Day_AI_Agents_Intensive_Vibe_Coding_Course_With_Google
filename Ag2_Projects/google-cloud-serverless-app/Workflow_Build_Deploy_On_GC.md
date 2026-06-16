@@ -38,7 +38,7 @@
 - Antigravity Walkthrough — used to validate the end‑to‑end pipeline
 
 ### Rough Diagram:
-Day_build_deply_agty_GCP
+<img src="../../Images/Day_build_deply_agty_GCP.png" width="650" height="500">
 
 ##### Note: Antigravity can help us to figure out the architecture details as we go along. However, it helps to have an idea on what you want to build. The more detail you can provide, the better results you'll get from Antigravity in terms of architecture and code.
 
@@ -116,7 +116,7 @@ Locate the bucket named document-processing-ingest-{project-id}.
 Click on the bucket name to browse files.
 Verify: You should see your uploaded files (e.g.,cloud_test_sample.txt).
 
-image
+<img src="../../Images/cloud_bucket.png" width="650" height="500">
 
 2. Pub/Sub
 Goal: Confirm the topic exists and has a push subscription.
@@ -127,6 +127,8 @@ Click on the topic ID.
 Scroll down to the Subscriptions tab.
 Verify: Ensure doc-uploads-sub is listed with "Push" delivery type.
 
+<img src="../../Images/pubSub_topic.png" width="650" height="800">
+
 3. Cloud Run
 Goal: Check the service status and logs.
 
@@ -135,6 +137,8 @@ Click on the service document-processor.
 Verify:
 Health: Green checkmark indicating the service is active.
 Logs: Click the Logs tab. Look for entries like "Processing file: gs://..." and "Successfully inserted...".
+
+<img src="../../Images/Cloud_run.png" width="650" height="300">
 
 4. BigQuery
 Goal: Validate the data is actually stored.
@@ -145,42 +149,18 @@ Click on the processed_metadata table.
 Click on the Query tab and retrieve all rows from the table via the SELECT * statement.
 Verify: You should see rows containing filename, process_timestamp, tags, and word_count.
 
+#### BigQuery Schema:
 
-8. 8. Extend the application : No Quota
+<img src="../../Images/bigQuery_schema.png" width="650" height="700">
 
-9. Run ./teardown.sh
+#### BIgQuery Table:
 
-$ ./teardown.sh
+<img src="../../Images/bigquerry_table.png" width="650" height="700">
 
-============================================================
-⚠   This will PERMANENTLY DELETE all pipeline resources!
-  Project : daykgadkproj
-============================================================
-  Type 'yes' to continue: yes
-Updated property [core/project].
 
-▶ Deleting Pub/Sub subscription: doc-processor-push-sub
-⚠ Subscription not found — skipping
+## 8. Extend the application : No Quota
 
-▶ Removing GCS notifications on gs://daykgadkproj-doc-uploads
-⚠ Bucket not found — skipping notification removal
+## 9. Run ./teardown.sh
+- $ ./teardown.sh
 
-▶ Deleting Pub/Sub topic: document-upload-events
-⚠ Topic not found — skipping
-
-▶ Deleting Cloud Run service: doc-processor
-⚠ Cloud Run service not found — skipping
-
-▶ Deleting GCS bucket: gs://daykgadkproj-doc-uploads
-⚠ Bucket not found — skipping
-
-▶ Deleting BigQuery dataset: docpipeline_dataset
-⚠ Dataset not found — skipping
-
-▶ Deleting Container Registry image: gcr.io/daykgadkproj/doc-processor
-⚠ Image not found or already deleted
-
-============================================================
-  ✅  Teardown complete. All pipeline resources deleted.
-============================================================
-
+<img src="../../Images/teardown.png" width="650" height="700">

@@ -139,7 +139,7 @@ bq query --use_legacy_sql=false \
 ## Cloud Run - Deployment service
 Health: Green checkmark indicating the service is active.
 
-<img src="../../Images/Cloud_run.png" width="600" height="700">
+<img src="../../Images/Cloud_run.png" width="700" height="300">
 
 ----
 
