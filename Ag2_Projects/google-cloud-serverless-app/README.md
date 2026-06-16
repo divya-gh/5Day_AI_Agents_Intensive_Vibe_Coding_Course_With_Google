@@ -109,7 +109,7 @@ bq query --use_legacy_sql=false \
 | `processing_duration_ms` | INTEGER | NULLABLE | Processing time in ms |
 | `confidence_score` | FLOAT | NULLABLE | Simulated OCR confidence (0.70–0.99) |
 
-<img src="../Images/bigQuery_schema.png" width="350" height="400">
+<img src=".../Images/bigQuery_schema.png" width="350" height="400">
 
 ----
 
