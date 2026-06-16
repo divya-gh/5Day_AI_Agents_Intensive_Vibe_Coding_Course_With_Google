@@ -1,0 +1,29 @@
+{
+  "name": "google-news-cli",
+  "version": "1.0.0",
+  "description": "A Node.js CLI tool to fetch and search the latest news from Google News",
+  "main": "cli.js",
+  "type": "module",
+  "bin": {
+    "google-news-cli": "./cli.js"
+  },
+  "scripts": {
+    "start": "node cli.js"
+  },
+  "dependencies": {
+    "@inquirer/prompts": "^5.0.0",
+    "chalk": "^5.3.0",
+    "commander": "^11.1.0",
+    "open": "^10.1.0",
+    "ora": "^8.0.1",
+    "rss-parser": "^3.13.0"
+  },
+  "keywords": [
+    "google-news",
+    "cli",
+    "news",
+    "rss"
+  ],
+  "author": "",
+  "license": "ISC"
+}
