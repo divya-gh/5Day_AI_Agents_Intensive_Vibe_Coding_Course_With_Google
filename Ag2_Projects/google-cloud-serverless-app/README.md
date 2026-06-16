@@ -1,6 +1,7 @@
-# Serverless Document Processing Pipeline — Google Cloud
+# ⚡ Serverless Doc Pipeline — Powered by Google Cloud + Antigravity  
+#### Upload → Trigger → Process → Store → Done.
 
-An event-driven, serverless pipeline that processes file uploads automatically:
+##An event-driven, serverless pipeline that processes file uploads automatically:
 **Cloud Storage → Pub/Sub → Cloud Run (simulated OCR) → BigQuery**
 
 ---
