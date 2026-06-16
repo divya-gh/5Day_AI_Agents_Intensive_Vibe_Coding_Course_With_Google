@@ -109,7 +109,7 @@ bq query --use_legacy_sql=false \
 | `processing_duration_ms` | INTEGER | NULLABLE | Processing time in ms |
 | `confidence_score` | FLOAT | NULLABLE | Simulated OCR confidence (0.70–0.99) |
 
-<img src=".../Images/bigQuery_schema.png" width="350" height="400">
+<img src="../../Images/bigQuery_schema.png" width="350" height="400">
 
 ----
 
@@ -132,14 +132,14 @@ bq query --use_legacy_sql=false \
 | `POST` | `/process` | Pub/Sub push handler |
 | `GET` | `/docs` | Auto-generated Swagger UI |
 
-<img src="../pubSub_topic.png" width="350" height="400">
+<img src="../../Images/pubSub_topic.png" width="350" height="400">
 
 ----
 
 ## Cloud Run - Deployment service
 Health: Green checkmark indicating the service is active.
 
-<img src="../Cloud_run.png" width="350" height="400">
+<img src="../../Images/Cloud_run.png" width="350" height="400">
 
 ----
 
@@ -174,7 +174,7 @@ ORDER BY processing_duration_ms DESC
 LIMIT 20;
 ```
 
-<img src="../bigquerry_table.png" width="350" height="400">
+<img src="../../Images/bigquerry_table.png" width="350" height="400">
 
 -------
 
