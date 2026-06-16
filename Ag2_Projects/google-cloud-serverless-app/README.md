@@ -93,7 +93,7 @@ bq query --use_legacy_sql=false \
    LIMIT 10'
 ```
 
----
+-----
 
 ## BigQuery Schema
 
@@ -109,7 +109,9 @@ bq query --use_legacy_sql=false \
 | `processing_duration_ms` | INTEGER | NULLABLE | Processing time in ms |
 | `confidence_score` | FLOAT | NULLABLE | Simulated OCR confidence (0.70–0.99) |
 
----
+<img src="../bigQuery_schema.png" width="350" height="400">
+
+----
 
 ## Environment Variables (Cloud Run)
 
@@ -120,7 +122,7 @@ bq query --use_legacy_sql=false \
 | `BQ_TABLE` | `document_metadata` | BigQuery table |
 | `PORT` | `8080` | Injected by Cloud Run |
 
----
+----
 
 ## API Endpoints
 
@@ -130,17 +132,17 @@ bq query --use_legacy_sql=false \
 | `POST` | `/process` | Pub/Sub push handler |
 | `GET` | `/docs` | Auto-generated Swagger UI |
 
----
+<img src="../pubSub_topic.png" width="350" height="400">
 
-## Tear Down
+----
 
-```bash
-./teardown.sh
-```
+## Cloud Run - Deployment service
+Health: Green checkmark indicating the service is active.
 
-Deletes all resources in safe dependency order with a confirmation prompt.
+<img src="../Cloud_run.png" width="350" height="400">
 
----
+----
+
 
 ## Example BigQuery Queries
 
@@ -171,3 +173,49 @@ FROM `daykgadkproj.docpipeline_dataset.document_metadata`
 ORDER BY processing_duration_ms DESC
 LIMIT 20;
 ```
+
+<img src="../bigquerry_table.png" width="350" height="400">
+
+-------
+
+## Tear Down
+
+```bash
+./teardown.sh
+```
+
+#### Deletes all resources in safe dependency order with a confirmation prompt.
+
+============================================================
+⚠   This will PERMANENTLY DELETE all pipeline resources!
+  Project : daykgadkproj
+============================================================
+  Type 'yes' to continue: yes
+Updated property [core/project].
+
+▶ Deleting Pub/Sub subscription: doc-processor-push-sub
+⚠ Subscription not found — skipping
+
+▶ Removing GCS notifications on gs://daykgadkproj-doc-uploads
+⚠ Bucket not found — skipping notification removal
+
+▶ Deleting Pub/Sub topic: document-upload-events
+⚠ Topic not found — skipping
+
+▶ Deleting Cloud Run service: doc-processor
+⚠ Cloud Run service not found — skipping
+
+▶ Deleting GCS bucket: gs://daykgadkproj-doc-uploads
+⚠ Bucket not found — skipping
+
+▶ Deleting BigQuery dataset: docpipeline_dataset
+⚠ Dataset not found — skipping
+
+▶ Deleting Container Registry image: gcr.io/daykgadkproj/doc-processor
+⚠ Image not found or already deleted
+
+============================================================
+  ✅  Teardown complete. All pipeline resources deleted.
+============================================================
+
+---
