@@ -186,36 +186,6 @@ LIMIT 20;
 
 #### Deletes all resources in safe dependency order with a confirmation prompt.
 
-============================================================
-⚠   This will PERMANENTLY DELETE all pipeline resources!
-  Project : daykgadkproj
-============================================================
-  Type 'yes' to continue: yes
-Updated property [core/project].
-
-▶ Deleting Pub/Sub subscription: doc-processor-push-sub
-⚠ Subscription not found — skipping
-
-▶ Removing GCS notifications on gs://daykgadkproj-doc-uploads
-⚠ Bucket not found — skipping notification removal
-
-▶ Deleting Pub/Sub topic: document-upload-events
-⚠ Topic not found — skipping
-
-▶ Deleting Cloud Run service: doc-processor
-⚠ Cloud Run service not found — skipping
-
-▶ Deleting GCS bucket: gs://daykgadkproj-doc-uploads
-⚠ Bucket not found — skipping
-
-▶ Deleting BigQuery dataset: docpipeline_dataset
-⚠ Dataset not found — skipping
-
-▶ Deleting Container Registry image: gcr.io/daykgadkproj/doc-processor
-⚠ Image not found or already deleted
-
-============================================================
-  ✅  Teardown complete. All pipeline resources deleted.
-============================================================
+<img src="../../Images/teardown.png" width="600" height="700">
 
 ---
