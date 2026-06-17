@@ -75,7 +75,7 @@ You’ll now “plug in” the MCP server into Antigravity.
 3. Set Name with an arbitrary name such as Antigravity.
 4. Click the Select API restrictions drop-down, type Developer Knowledge API, check the result, then click OK.
 
-### Configure ANtigravity IDE
+### 🔧 Configure Antigravity IDE
 
 ### Step 1:
 
@@ -98,17 +98,17 @@ You’ll now “plug in” the MCP server into Antigravity.
 }
 ```
 -------------------------------------------
-### Step 2: Validate
+### 🧪 Step 2: Validate ANtigravity IDE
 - Open Antigravity User Settings via the Editor-Specific settings menu dropdown at the top of the window.
 - Navigate to Customizations.
 - Under Installed MCP Servers, click Refresh.
 - Check for Google-developer-Knowledge MCP server installed.
 
-### Configure ANtigravity 2.0 and Validate
+### 🔧 Configure ANtigravity 2.0 and Validate
 - Go to Settings / Customizations / Under Installed MCP Servers, click Refresh.
 - Check for Google-developer-Knowledge MCP server installed.
 
-### Validate Antigravity CLI
+### 🧪 Validate Antigravity CLI
 1. Open Git Bash
 2. Start the CLI executing the command `agy` from the terminal.
 3. Type /mcp and press enter.
@@ -125,11 +125,11 @@ You’ll now “plug in” the MCP server into Antigravity.
 **“From Google Developer Knowledge, show me the official docs for using Vertex AI with Python.”**
 
 
-### Watch for:
+### 🖥️ Watch for:
 - The agent calling the MCP tool (you may see a “tool call” or “MCP call” in the UI).
 - Responses that quote or reference official docs, not just generic LLM text.
 
-#### Variations to try:
+#### 💡Variations to try:
 - Ask for API reference.
 - Ask for quickstart guides.
 - Ask for code samples.
@@ -142,16 +142,16 @@ If it’s wired correctly, the agent will keep pulling from Google Developer Kno
 ### 1. Antigravity CLI
 <img src="./Images/mcp_test1.png" width="700" height="800">
 
-### Why This Matters
+### 📚 Why This Matters
 
 **Without Google Developer Knowledge MCP:**
 
     LLM → Static Training Data
 
-#### Potential issues:
-* Outdated documentation
-* Hallucinated APIs
-* Missing recent releases
+#### 🤖 Potential issues:
+* ❌ Outdated documentation
+* ❌ Hallucinated APIs
+* ❌ Missing recent releases
 
 #### With Google Developer Knowledge MCP:
 ```
@@ -162,7 +162,7 @@ Google Developer Knowledge MCP
 Official Google Documentation
 ```
 
-#### Benefits:
+#### 🌈 Benefits:
 * More accurate answers
 * Current documentation
 * Lower hallucination risk
