@@ -137,10 +137,10 @@ If it’s wired correctly, the agent will keep pulling from Google Developer Kno
 
 ## Example: 
 ### 1. Antigravity 2.0
-<img src="../../Images/antigravity_mcp_test2.png" width="700" height="800">
+<img src="./Images/antigravity_mcp_test2.png" width="700" height="800">
 
 ### 1. Antigravity CLI
-<img src="../../Images/mcp_test1.png" width="700" height="800">
+<img src="./Images/mcp_test1.png" width="700" height="800">
 
 ### Why This Matters
 
