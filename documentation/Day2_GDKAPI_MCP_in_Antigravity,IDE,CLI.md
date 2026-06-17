@@ -45,6 +45,9 @@ Billing is not required for this codelab scenario.
 * Antigravity CLI
 If you're currently using Gemini CLI, migrate to Antigravity CLI as described in Google's transition documentation.
 
+---------------------------------------------------------------------------------------------------------------------------
+Setting
+---------------------------------------------------------------------------------------------------------------------------
 
 ### 🔧 Step 1 – Enable the Developer Knowledge API
 
