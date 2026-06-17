@@ -1,47 +1,64 @@
-# Google Developer Knowledge MCP server in Google Antigravity 2.0, IDE, and/or CLI
+# 🚀 Integrating Google Developer Knowledge MCP with Antigravity 2.0 (IDE & CLI)
 
-## Goal: 
+## 🎯 Goal: 
 - Integrate Google Developer Knowledge into Antigravity, IDE or CLI call via APIs and MCP so that developers can integrate it into applications and workflows.
 
 - Learn :  how to install and use the Developer Knowledge MCP from Antigravity 2.0, IDE, and/or CLI
 
-## What is Google Developer Knowledge ?
+## What is Google Developer Knowledge (GDK?
 
 ** GDK is 'the canonical, machine-readable source of Google's public developer documentation'.**
 - provides programmatic access to Google's public developer documentation, enabling you to integrate this knowledge base into your own applications and workflows.
 - Instead of relying on outdated LLM training data or manual web scraping, AI agent developers should use it for real-time access to the most accurate documentation and reduce risk of hallucinations.
 
-## prerequisites
+### Benefits
 
-#### 1 – Browser:
-- Chrome (or any modern browser) to access Google Cloud Console and the codelab.
+✅ Access real-time documentation
+✅ Reduce AI hallucinations
+✅ Eliminate manual web scraping
+✅ Avoid relying on outdated LLM training data
+✅ Build more reliable AI developer assistants
 
-#### 2 – Google Cloud project:
-- Create a new project or re use old one
-- Billing not required for this API in the codelab context.
+## 📋Prerequisites
 
-#### 3 – Antigravity 2.0 installed:
+Before starting, ensure you have:
 
-Either: 
+#### 1. Web Browser
+* Chrome (recommended)
+* Any modern browser
 
-Antigravity IDE, or
+##### Used for:
+* Google Cloud Console
+* Codelab walkthroughs
 
-Antigravity CLI, or both.
-If you were using Gemini CLI, this codelab expects you to move to Antigravity CLI (the blog post explains the transition).
+#### 2. Google Cloud Project
 
-## How: 
+##### Use either:
+* A new Google Cloud project
+* An existing project
+Billing is not required for this codelab scenario.
 
-### Step 1 – Enable the Developer Knowledge API
+#### 3. Antigravity Installed
+
+##### Install one or both:
+* Antigravity IDE
+* Antigravity CLI
+If you're currently using Gemini CLI, migrate to Antigravity CLI as described in Google's transition documentation.
+
+
+### 🔧 Step 1 – Enable the Developer Knowledge API
+
 #### In your Google Cloud project:
 - Open Google Cloud Console.
 - Select the project you’ll use for this codelab.
 - Go to APIs & Services → Library.
 - Search for:
      “Google Developer Knowledge API” (or similar name as shown in the codelab).
+
 - Click the API → Enable.
 After this, your project is allowed to call the Developer Knowledge backend that the MCP server will use.
 
-## Step 2 – Configure Antigravity to use the Developer Knowledge MCP
+## 🔑 Step 2 – Configure Antigravity to use the Developer Knowledge MCP
 You’ll now “plug in” the MCP server into Antigravity. 
 
 **Antigravity 2.0, IDE, and CLI share a central MCP configuration in the file ~/.gemini/config/mcp_config.json.**
@@ -94,7 +111,7 @@ You’ll now “plug in” the MCP server into Antigravity.
 3. Type /mcp and press enter.
 
 
-## Step 3 –Test the integration with prompts
+## ⚙️ Step 3 –Test the integration with prompts
 
 #### In Antigravity IDE or CLI:
 - Start a conversation in your project (Agent Panel in IDE, or antigravity chat in CLI).
@@ -121,3 +138,32 @@ If it’s wired correctly, the agent will keep pulling from Google Developer Kno
 
 ### 1. Antigravity CLI
 <img src="../../Images/mcp_test1.png" width="700" height="800">
+
+### Why This Matters
+
+**Without Google Developer Knowledge MCP:**
+
+    LLM → Static Training Data
+
+#### Potential issues:
+* Outdated documentation
+* Hallucinated APIs
+* Missing recent releases
+
+#### With Google Developer Knowledge MCP:
+```
+LLM
+  ↓
+Google Developer Knowledge MCP
+  ↓
+Official Google Documentation
+```
+
+#### Benefits:
+* More accurate answers
+* Current documentation
+* Lower hallucination risk
+* Better developer productivity
+
+
+Citation:
