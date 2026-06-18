@@ -98,3 +98,25 @@ Or delete the entire project if it was created only for testing.
 - Deployed it to Cloud Run
 - Learned the full prototype → production workflow
 This is the foundation for building more advanced AI‑powered applications.
+
+--------------------------------------------------
+
+# 7. Installing Agent Skills using npx skills
+
+### If you installed skills using:
+```
+npx skills add <something>
+```
+They are now located here:
+```
+~/.agents/skills
+```
+To make Antigravity CLI see them, copy them to:
+
+```
+~/.gemini/antigravity-cli/skills/
+
+```
+
+### Project Scope: Located in <project-root>/.agent/skills/.
+### Global Scope: Located in ~/.gemini/antigravity-cli/skills/.
