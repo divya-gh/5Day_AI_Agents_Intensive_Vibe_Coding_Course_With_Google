@@ -1,10 +1,10 @@
-# Vibe coding AI agents: managing the lifecycle with Agents CLI and ADK 2.0
+# 🚀 Vibe coding AI agents: managing the lifecycle with Agents CLI and ADK 2.0
 
 **Build and manage a complete ADK 2.0 agent lifecycle—scaffold, run, evaluate, and (optionally) deploy—using Agents CLI.**
 
 **You’ll go from “idea” to a working, testable agent in a structured, repeatable flow.**
 
-## Introduction
+## 📊  Introduction
 #### ADK 2.0 gives you structured, graph‑based workflows for agents—nodes, tools, and orchestration in Python.   
 
 #### Agents CLI wraps that with lifecycle commands: it knows how to scaffold projects, run agents, evaluate them, and ship them to production. 
@@ -22,7 +22,7 @@
     - Agents CLI role: scaffolding, evaluation, deployment, observability around ADK agents 
     - End‑to‑end lifecycle: create → run → test/eval → iterate → deploy
 
-## Prerequisites and setup
+## 📐 Prerequisites and setup
 ### Goal: Have the toolchain ready so every later command “just works”.
 
 #### Install core tools:
