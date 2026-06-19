@@ -109,7 +109,7 @@
                 "content": {
                   "parts": [
                     {
-                      "text": "{\n  \"risk_level\": \"low"
+                      "text": "{\n  \"risk"
                     }
                   ],
                   "role": "model"
@@ -120,7 +120,7 @@
                 "content": {
                   "parts": [
                     {
-                      "text": "\",\n  \"risk_factors\": [],\n  \"recommendation\": \"Approve\",\n  \"summary\": \"The"
+                      "text": "_level\": \"low\",\n  \"risk_factors\": [],\n  \"recommendation\": \"Approve\",\n  \"summary"
                     }
                   ],
                   "role": "model"
@@ -131,7 +131,7 @@
                 "content": {
                   "parts": [
                     {
-                      "text": " expense amount is reasonable for a flight ticket, the description is clear and aligned with the travel category, and the transaction occurred"
+                      "text": "\": \"The expense amount is reasonable for a flight, the description is clear and aligns with the category, and the submission date falls"
                     }
                   ],
                   "role": "model"
@@ -142,7 +142,7 @@
                 "content": {
                   "parts": [
                     {
-                      "text": " on a weekday.\"\n}"
+                      "text": " on a Thursday, which is a standard business day.\"\n}"
                     }
                   ],
                   "role": "model"
@@ -154,7 +154,7 @@
                   "parts": [
                     {
                       "text": "",
-                      "thought_signature": "EjQKMgEMOdbH3cMN/xBvHZz4uu6kyKxFRysA8uQ8KU5yAK52UIQOk7c2Jn/NSGIfkIpcawJj"
+                      "thought_signature": "EjQKMgEMOdbHxcYlldBQSmmg98zNOiwVeBZG8QlGDSULvSI3e107uU6nqflXTBFf5VCVr8ln"
                     }
                   ],
                   "role": "model"
@@ -165,11 +165,11 @@
                 "content": {
                   "parts": [
                     {
-                      "text": "{\n  \"risk_level\": \"low\",\n  \"risk_factors\": [],\n  \"recommendation\": \"Approve\",\n  \"summary\": \"The expense amount is reasonable for a flight ticket, the description is clear and aligned with the travel category, and the transaction occurred on a weekday.\"\n}"
+                      "text": "{\n  \"risk_level\": \"low\",\n  \"risk_factors\": [],\n  \"recommendation\": \"Approve\",\n  \"summary\": \"The expense amount is reasonable for a flight, the description is clear and aligns with the category, and the submission date falls on a Thursday, which is a standard business day.\"\n}"
                     },
                     {
                       "text": "",
-                      "thought_signature": "EjQKMgEMOdbH3cMN/xBvHZz4uu6kyKxFRysA8uQ8KU5yAK52UIQOk7c2Jn/NSGIfkIpcawJj"
+                      "thought_signature": "EjQKMgEMOdbHxcYlldBQSmmg98zNOiwVeBZG8QlGDSULvSI3e107uU6nqflXTBFf5VCVr8ln"
                     }
                   ],
                   "role": "model"
@@ -185,7 +185,7 @@
                         "args": {
                           "interruptId": "expense_decision",
                           "payload": null,
-                          "message": "\ud83d\udd0d  EXPENSE REVIEW REQUIRED\n\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\n  Submitter:   charlie@company.com\n  Amount:      $350.00\n  Category:    travel\n  Description: Flight ticket to conference\n  Date:        2026-06-18\n\ud83d\udcca  RISK ASSESSMENT\n  Level:          low\n  Factors:        none\n  Recommendation: Approve\n  Summary:        The expense amount is reasonable for a flight ticket, the description is clear and aligned with the travel category, and the transaction occurred on a weekday.\n\n\ud83d\udc49  Reply with  approve  or  reject  (optionally followed by a reason).",
+                          "message": "\ud83d\udd0d  EXPENSE REVIEW REQUIRED\n\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\n  Submitter:   charlie@company.com\n  Amount:      $350.00\n  Category:    travel\n  Description: Flight ticket to conference\n  Date:        2026-06-18\n\ud83d\udcca  RISK ASSESSMENT\n  Level:          low\n  Factors:        none\n  Recommendation: Approve\n  Summary:        The expense amount is reasonable for a flight, the description is clear and aligns with the category, and the submission date falls on a Thursday, which is a standard business day.\n\n\ud83d\udc49  Reply with  approve  or  reject  (optionally followed by a reason).",
                           "response_schema": null
                         },
                         "name": "adk_request_input"
@@ -216,7 +216,7 @@
                 "content": {
                   "parts": [
                     {
-                      "text": "\u2705  Decision recorded:\n```json\n{\n  \"status\": \"approved\",\n  \"decided_by\": \"human\",\n  \"reason\": \"{'expense_decision': 'approve'}\",\n  \"expense\": {\n    \"amount\": 350.0,\n    \"submitter\": \"charlie@company.com\",\n    \"category\": \"travel\",\n    \"description\": \"Flight ticket to conference\",\n    \"date\": \"2026-06-18\"\n  },\n  \"risk_assessment\": {\n    \"risk_level\": \"low\",\n    \"risk_factors\": [],\n    \"recommendation\": \"Approve\",\n    \"summary\": \"The expense amount is reasonable for a flight ticket, the description is clear and aligned with the travel category, and the transaction occurred on a weekday.\"\n  },\n  \"security_alert\": null\n}\n```"
+                      "text": "\u2705  Decision recorded:\n```json\n{\n  \"status\": \"approved\",\n  \"decided_by\": \"human\",\n  \"reason\": \"{'expense_decision': 'approve'}\",\n  \"expense\": {\n    \"amount\": 350.0,\n    \"submitter\": \"charlie@company.com\",\n    \"category\": \"travel\",\n    \"description\": \"Flight ticket to conference\",\n    \"date\": \"2026-06-18\"\n  },\n  \"risk_assessment\": {\n    \"risk_level\": \"low\",\n    \"risk_factors\": [],\n    \"recommendation\": \"Approve\",\n    \"summary\": \"The expense amount is reasonable for a flight, the description is clear and aligns with the category, and the submission date falls on a Thursday, which is a standard business day.\"\n  },\n  \"security_alert\": null\n}\n```"
                     }
                   ],
                   "role": "model"
@@ -278,7 +278,7 @@
                 "content": {
                   "parts": [
                     {
-                      "text": " [\n    \"Sensitive data exposure: Full credit card number fragment included in description\",\n    \"Missing vendor information for a software expense\",\n    \"Lack of detail regarding the specific billing tool name\"\n  ],\n  \"recommendation\": \"Flag for compliance review regarding PII exposure; request the user to redact"
+                      "text": " [\n    \"Exposure of sensitive financial information (full credit card digits) in description field\",\n    \"Missing specific vendor name or license details\"\n  ],\n  \"recommendation\": \""
                     }
                   ],
                   "role": "model"
@@ -289,7 +289,7 @@
                 "content": {
                   "parts": [
                     {
-                      "text": " the credit card information and provide a formal vendor invoice.\",\n  \"summary\": \"The expense contains sensitive PII (credit card info"
+                      "text": "Flag for redaction of sensitive data and request documentation providing vendor name and invoice proof.\",\n  \"summary\": \"The expense contains potentially"
                     }
                   ],
                   "role": "model"
@@ -300,7 +300,7 @@
                 "content": {
                   "parts": [
                     {
-                      "text": ") in the description field, which is a significant policy violation. The description is also insufficient to audit the software purchase properly.\"\n}"
+                      "text": " sensitive information in the description field and lacks sufficient vendor details for software verification, posing a compliance and security risk.\"\n}"
                     }
                   ],
                   "role": "model"
@@ -312,7 +312,7 @@
                   "parts": [
                     {
                       "text": "",
-                      "thought_signature": "EjQKMgEMOdbH1lCotPrebZ44cqPPY2LkCQFtn2qau92sIkKrh8hWnpkCRRegLbRtOtA1SeBu"
+                      "thought_signature": "EjQKMgEMOdbHwVoxmiOzdXzo2YE0OZOaAhA+LUVT6LYBzXnHKzxoh+I4mtCP5LW/3gHt4ZhL"
                     }
                   ],
                   "role": "model"
@@ -323,11 +323,11 @@
                 "content": {
                   "parts": [
                     {
-                      "text": "{\n  \"risk_level\": \"medium\",\n  \"risk_factors\": [\n    \"Sensitive data exposure: Full credit card number fragment included in description\",\n    \"Missing vendor information for a software expense\",\n    \"Lack of detail regarding the specific billing tool name\"\n  ],\n  \"recommendation\": \"Flag for compliance review regarding PII exposure; request the user to redact the credit card information and provide a formal vendor invoice.\",\n  \"summary\": \"The expense contains sensitive PII (credit card info) in the description field, which is a significant policy violation. The description is also insufficient to audit the software purchase properly.\"\n}"
+                      "text": "{\n  \"risk_level\": \"medium\",\n  \"risk_factors\": [\n    \"Exposure of sensitive financial information (full credit card digits) in description field\",\n    \"Missing specific vendor name or license details\"\n  ],\n  \"recommendation\": \"Flag for redaction of sensitive data and request documentation providing vendor name and invoice proof.\",\n  \"summary\": \"The expense contains potentially sensitive information in the description field and lacks sufficient vendor details for software verification, posing a compliance and security risk.\"\n}"
                     },
                     {
                       "text": "",
-                      "thought_signature": "EjQKMgEMOdbH1lCotPrebZ44cqPPY2LkCQFtn2qau92sIkKrh8hWnpkCRRegLbRtOtA1SeBu"
+                      "thought_signature": "EjQKMgEMOdbHwVoxmiOzdXzo2YE0OZOaAhA+LUVT6LYBzXnHKzxoh+I4mtCP5LW/3gHt4ZhL"
                     }
                   ],
                   "role": "model"
@@ -343,7 +343,7 @@
                         "args": {
                           "interruptId": "expense_decision",
                           "payload": null,
-                          "message": "\ud83d\udd0d  EXPENSE REVIEW REQUIRED\n\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\n  Submitter:   dan@company.com\n  Amount:      $120.00\n  Category:    software\n  Description: License fee for billing tool. My credit card is [REDACTED-CC].\n  Date:        2026-06-18\n  \u26a0\ufe0f  Redacted fields: credit_card\n\ud83d\udcca  RISK ASSESSMENT\n  Level:          medium\n  Factors:        Sensitive data exposure: Full credit card number fragment included in description, Missing vendor information for a software expense, Lack of detail regarding the specific billing tool name\n  Recommendation: Flag for compliance review regarding PII exposure; request the user to redact the credit card information and provide a formal vendor invoice.\n  Summary:        The expense contains sensitive PII (credit card info) in the description field, which is a significant policy violation. The description is also insufficient to audit the software purchase properly.\n\n\ud83d\udc49  Reply with  approve  or  reject  (optionally followed by a reason).",
+                          "message": "\ud83d\udd0d  EXPENSE REVIEW REQUIRED\n\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\n  Submitter:   dan@company.com\n  Amount:      $120.00\n  Category:    software\n  Description: License fee for billing tool. My credit card is [REDACTED-CC].\n  Date:        2026-06-18\n  \u26a0\ufe0f  Redacted fields: credit_card\n\ud83d\udcca  RISK ASSESSMENT\n  Level:          medium\n  Factors:        Exposure of sensitive financial information (full credit card digits) in description field, Missing specific vendor name or license details\n  Recommendation: Flag for redaction of sensitive data and request documentation providing vendor name and invoice proof.\n  Summary:        The expense contains potentially sensitive information in the description field and lacks sufficient vendor details for software verification, posing a compliance and security risk.\n\n\ud83d\udc49  Reply with  approve  or  reject  (optionally followed by a reason).",
                           "response_schema": null
                         },
                         "name": "adk_request_input"
@@ -374,7 +374,7 @@
                 "content": {
                   "parts": [
                     {
-                      "text": "\u2705  Decision recorded:\n```json\n{\n  \"status\": \"approved\",\n  \"decided_by\": \"human\",\n  \"reason\": \"{'expense_decision': 'approve'}\",\n  \"expense\": {\n    \"amount\": 120.0,\n    \"submitter\": \"dan@company.com\",\n    \"category\": \"software\",\n    \"description\": \"License fee for billing tool. My credit card is [REDACTED-CC].\",\n    \"date\": \"2026-06-18\"\n  },\n  \"risk_assessment\": {\n    \"risk_level\": \"medium\",\n    \"risk_factors\": [\n      \"Sensitive data exposure: Full credit card number fragment included in description\",\n      \"Missing vendor information for a software expense\",\n      \"Lack of detail regarding the specific billing tool name\"\n    ],\n    \"recommendation\": \"Flag for compliance review regarding PII exposure; request the user to redact the credit card information and provide a formal vendor invoice.\",\n    \"summary\": \"The expense contains sensitive PII (credit card info) in the description field, which is a significant policy violation. The description is also insufficient to audit the software purchase properly.\"\n  },\n  \"security_alert\": null\n}\n```"
+                      "text": "\u2705  Decision recorded:\n```json\n{\n  \"status\": \"approved\",\n  \"decided_by\": \"human\",\n  \"reason\": \"{'expense_decision': 'approve'}\",\n  \"expense\": {\n    \"amount\": 120.0,\n    \"submitter\": \"dan@company.com\",\n    \"category\": \"software\",\n    \"description\": \"License fee for billing tool. My credit card is [REDACTED-CC].\",\n    \"date\": \"2026-06-18\"\n  },\n  \"risk_assessment\": {\n    \"risk_level\": \"medium\",\n    \"risk_factors\": [\n      \"Exposure of sensitive financial information (full credit card digits) in description field\",\n      \"Missing specific vendor name or license details\"\n    ],\n    \"recommendation\": \"Flag for redaction of sensitive data and request documentation providing vendor name and invoice proof.\",\n    \"summary\": \"The expense contains potentially sensitive information in the description field and lacks sufficient vendor details for software verification, posing a compliance and security risk.\"\n  },\n  \"security_alert\": null\n}\n```"
                     }
                   ],
                   "role": "model"
