@@ -2,8 +2,8 @@
 
 [![ADK 2.0](https://img.shields.io/badge/ADK-2.0-blueviolet.svg)](https://github.com/google-gemini/google-adk)
 [![Model](https://img.shields.io/badge/Model-Gemini%202.5%20Flash-blue.svg)](https://deepmind.google/technologies/gemini/)
-[![Security Harness](https://img.shields.io/badge/Security-STRIDE%20Compliant-success.svg)](#security-boundaries--guardrails)
-[![Linter](https://img.shields.io/badge/Linter-Ruff%20%2F%20Ty%20%2F%20Codespell-green.svg)](#codebase-quality-assurance)
+[![Security Harness](https://img.shields.io/badge/Security-STRIDE%20Compliant-success.svg)](#-security-boundaries--guardrails)
+[![Linter](https://img.shields.io/badge/Linter-Ruff%20%2F%20Ty%20%2F%20Codespell-green.svg)](#-codebase-quality-assurance)
 
 A state-of-the-art, secure, and context-aware conversational AI shopping assistant built using Google’s **Agent Development Kit (ADK 2.0)**. The agent automates cart checkouts, applies single-use discount codes, awards loyalty points, and enforces strict security and transaction boundaries to prevent replay attacks and privilege escalation.
 
@@ -11,11 +11,13 @@ A state-of-the-art, secure, and context-aware conversational AI shopping assista
 
 ## 📱 User Experience & Architecture
 
+### Application Interface
+Below is a high-fidelity mockup of the interactive agent console, illustrating real-time cart state, discount code redemption status, and loyalty points tracking:
+
 ![App Interface Mockup](assets/interface.png)
 
 ### Central Architecture
-
-The agent is built as a stateful ReAct (Reasoning and Acting) workflow. It orchestrates user intent, routes logic through secure Python tools, and utilizes localized memory to track session details.
+The agent is designed as a stateful ReAct (Reasoning and Acting) workflow. It orchestrates user intent, routes logic through secure Python tools, and utilizes localized memory to track session details.
 
 ![Agent Architecture Diagram](assets/architecture.png)
 
@@ -29,7 +31,7 @@ The agent is built as a stateful ReAct (Reasoning and Acting) workflow. It orche
 *   **Web Services & API**: FastAPI & Uvicorn (real-time Streaming/SSE via `/run_sse`)
 *   **Dependency Management**: `uv` (Astral's fast Python package manager)
 *   **Quality Assurance & Linting**:
-    *   **Ruff**: Linting & Formatter
+    *   **Ruff**: Modern Python Linter & Formatter
     *   **Ty**: Astral's Rust-based type checker (MyPy alternative)
     *   **Codespell**: Automated spell checking
 *   **Testing**: Pytest (E2E Integration & Unit tests)
@@ -62,7 +64,7 @@ User-to-Cart matching   Blocked re-checkout state   Processed order-id list
 ```
 
 ### 1. Cart Ownership Boundary
-A user must not check out another user's cart. 
+A user must not check out another user's cart.
 *   **Guardrail**: The checkout logic verifies: `assert CARTS[cart_id]["user_id"] == user_id`. If they do not match, the transaction is rejected.
 
 ### 2. Double-Checkout Boundary
@@ -100,16 +102,39 @@ Awards points to a user after a successful purchase.
 
 ---
 
-## 📚 Agent Skills
+## 📖 STRIDE Threat Model
 
-### `stride-threat-model`
-Integrated via the ADK skills framework, this skill performs a systematic STRIDE threat modeling assessment on the current project's codebase and architecture.
-*   **Spoofing**: Enforced via caller user ID verification.
-*   **Tampering**: Guarded using strict boundary checks in the python tools.
-*   **Repudiation**: Enforced through secure, structured logging fallback.
-*   **Information Disclosure**: PII redaction and credential sandboxing via `.env`.
-*   **Denial of Service**: Out-of-memory prevention using light state containers.
-*   **Elevation of Privilege**: Tool routing isolation (the LLM cannot invoke commands outside bounds).
+A systematic STRIDE threat modeling assessment was performed on the current project's codebase and architecture:
+
+### 🛡️ Spoofing (Identity Spoofing)
+*   **Threat**: The `redeem_discount` tool relies on a plain string parameter `user_id` passed by the model. An attacker can spoof any registered user ID (e.g. `user123` or `student_user`) by declaring it in the prompt.
+*   **Severity**: High
+*   **Mitigation**: Authenticate the caller at the FastAPI application layer (e.g., using JWT/OAuth2 Bearer tokens) and bind the verified user identity to the agent session or pass it securely through `ToolContext` rather than letting the user supply it as an argument.
+
+### ⚠️ Tampering (Data/State Manipulation)
+*   **Threat**: Prompt injection attacks could instruct the LLM to call the `redeem_discount` tool with arbitrary codes, or override constraints. Furthermore, because `DISCOUNT_CODES` state is in-memory and shared globally across the app instance, concurrent users could manipulate the same codes.
+*   **Severity**: Medium
+*   **Mitigation**: Use Pydantic schema validation for all tool inputs. Clean and isolate state per session by moving in-memory stores to a database layer.
+
+### 📝 Repudiation (Audit and Traceability)
+*   **Threat**: Discount redemptions are performed in-memory. In the event of fraudulent activity, there is no persistent audit trail (e.g., database transaction logs) to attribute the transaction to a specific user session or request context.
+*   **Severity**: Medium
+*   **Mitigation**: Integrate persistent transaction logging to a secure database or write structured audit logs to Google Cloud Logging.
+
+### 🔍 Information Disclosure (Data Leakage)
+*   **Threat**: Unhandled exception stack traces from FastAPI could be returned to client responses, leaking server directory layouts or package versions.
+*   **Severity**: High
+*   **Mitigation**: Pull credentials dynamically from environment variables (`os.environ`) or GCP Secret Manager. Implement global exception handling middleware in FastAPI to sanitize error messages.
+
+### 🚫 Denial of Service (Availability)
+*   **Threat**: An attacker could flood the FastAPI endpoint with requests, exhausting the Gemini API rate limits and spawning infinite tool execution loops.
+*   **Severity**: Medium
+*   **Mitigation**: Install rate-limiting middleware (like `slowapi`) on the FastAPI application endpoints.
+
+### 🔑 Elevation of Privilege (Access Control)
+*   **Threat**: The FastAPI server lacks authorization guards; anyone with network access to the port can interact with the agent and execute discount code redemptions.
+*   **Severity**: High
+*   **Mitigation**: Add authentication middleware to FastAPI endpoints and restrict access control to registered client origins.
 
 ---
 
@@ -153,7 +178,7 @@ uv run pytest
 ```
 
 ### 5. Launch the Agent Playground
-Start the interactive Web UI playground (using a localized host to prevent shell wildcard expansion):
+Start the interactive Web UI playground:
 ```bash
 uv run adk web --host 127.0.0.1 --port 8080 --allow_origins "http://localhost:8080" --reload_agents
 ```
