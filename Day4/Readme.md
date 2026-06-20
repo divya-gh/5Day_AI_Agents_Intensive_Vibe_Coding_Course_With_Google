@@ -1,12 +1,9 @@
-# Transforming AI models into
-secure, high-aligning enterprise
-agents through continuous trust
-and rigorous evaluation is more
-important than ever.       
-              
+# Transforming AI models into secure, high-aligning enterprise agents through continuous trustand rigorous evaluation is moreimportant than ever.       
+
+## 📌 Introduction            
 Modern AI agents can write code, call tools, access internal systems, and change real environments. This makes them powerful — but also risky. The old way of trusting software (tests pass → code is safe) no longer works.
 
-1. Why trust breaks in agentic systems
+### 🔍 1. Why trust breaks in agentic systems
 Traditional software is predictable: same input → same output.
 
 AI agents are non‑deterministic and can act on their own.
@@ -15,7 +12,7 @@ Even with valid credentials, an agent might misunderstand intent or take unsafe 
 
 So trust can’t be a one‑time check — it must be continuous.
 
-2. Two kinds of trust you must enforce
+### 🔐 2. Two kinds of trust you must enforce
 The whitepaper says enterprise AI needs two separate trust systems:
 
 Security
@@ -28,19 +25,15 @@ Did it understand the task? Did it follow conventions? Is the result worth shipp
 
 An agent can be secure but still produce bad or misaligned work.
 
-3. Why a model is NOT an agent
+.
+
+### 🤖 3. Why a model is NOT an agent
 A raw LLM becomes an “agent” only when wrapped in:
+- state , tools, feedback loops, constraints
 
-state
-
-tools
-
-feedback loops
-
-constraints
 This wrapper is called the harness, and securing the harness is more important than securing the model itself.
 
-4. The new threat landscape
+### 4. The new threat landscape
 According to threat intelligence (e.g., Mandiant), attackers now use AI tools that can:
 
 rewrite code
@@ -51,36 +44,25 @@ exploit agentic workflows
 
 So enterprises must secure not just apps — but the AI workforce itself.
 
-5. Effective Trust
+### 🔄 5. Effective Trust
 Trust must be:
 
-continuous
+- continuous
+- dynamic
+- based on context
+- enforced at runtime
 
-dynamic
+### This is called Effective Trust — a living metric that evaluates:
+- supply chain
+- identity
+- runtime behavior
+- context
 
-based on context
-
-enforced at runtime
-
-This is called Effective Trust — a living metric that evaluates:
-
-supply chain
-
-identity
-
-runtime behavior
-
-context
-
-6. The 7‑Pillar Security Architecture
+### 🏛️ 6. The 7‑Pillar Security Architecture
 To secure vibe‑coded agents, the whitepaper introduces a layered defense model:
-
-A strict 7‑pillar baseline
-
-High‑velocity execution controls
-
-Active agentic defense mechanisms
-
+- A strict 7‑pillar baseline
+- High‑velocity execution controls
+- Active agentic defense mechanisms
 This creates a full “defense‑in‑depth” system for safe, high‑speed agent development.
 
 # Security: The Evolution to Secure Agentic Development
@@ -154,7 +136,7 @@ This creates a full “defense‑in‑depth” system for safe, high‑speed age
 
 ▼  Forms the secure “agent harness” ▼
 
-1. Infrastructure & Networking
+### 1. Infrastructure & Networking
 Keep the agent’s execution environment locked down.
 
 Run code in isolated sandboxes
@@ -163,7 +145,7 @@ Control what the agent can reach on the network
 
 Prevent data from leaking out
 
-2. Data
+### 2. Data
 Protect the sensitive context the agent sees.
 
 Encrypt data
@@ -172,14 +154,14 @@ Use least‑privilege access
 
 Partition vector databases to prevent cross‑tenant poisoning
 
-3. Model
+### 3. Model
 Secure the agent’s “brain” and instructions.
 
 Treat prompts and rule files like source code
 
 Protect them from tampering or injection attacks
 
-4. Application & Runtime
+### 4. Application & Runtime
 Control what the agent does while it’s running.
 
 Use LLM firewalls
@@ -188,14 +170,14 @@ Add hooks before/after tool calls
 
 Use gateways to prevent agents from calling each other freely
 
-5. Identity & Access Management (IAM)
+### 5. Identity & Access Management (IAM)
 Give every agent a unique, cryptographic identity.
 
 Prevent “confused deputy” attacks
 
 Use ABAC + just‑in‑time, short‑lived credentials
 
-6. Observability & Security Ops
+### 6. Observability & Security Ops
 Watch the agent continuously.
 
 Logs, traces, metrics
@@ -204,7 +186,7 @@ Detect infinite loops or drift
 
 Blue/Red/Green teams simulate attacks and quarantine issues
 
-7. Governance
+### 7. Governance
 Ensure agents follow laws, policies, and compliance rules.
 
 EU AI Act, risk assessments, audits
@@ -220,19 +202,17 @@ Digital signatures on agent outputs
 Vibe‑coded agents write code fast, test it, fix errors, and try again.
 Because this code is generated on the fly, you can’t trust it by default.
 
-### A. Sandboxes (Safe Execution Environments)
-What’s the problem?
-Generated code may:
+## A. Sandboxes (Safe Execution Environments)
 
-Contain bugs
+### What’s the problem?
 
-Be insecure
+### Generated code may:
+- Contain bugs
+- Be insecure
+- Try to access things it shouldn’t
+- Be tricked into running harmful commands
 
-Try to access things it shouldn’t
-
-Be tricked into running harmful commands
-
-The solution
+### The solution
 Run all agent‑generated code inside ephemeral, isolated sandboxes:
 
 Temporary (reset every run)
@@ -245,7 +225,7 @@ Tools run in hardened containers or gVisor‑style environments
 
 👉 This ensures even bad or broken code cannot escape or persist.
 
-B. Hallucinated Packages (Supply Chain Risk)
+### B. Hallucinated Packages (Supply Chain Risk)
 What’s the problem?
 LLMs often “invent” fake package names.
 Attackers see these hallucinations and upload malware using those exact names.
@@ -267,7 +247,7 @@ Binary authorization
 
 👉 This stops agents from accidentally pulling malware into your system.
 
-C. Egress Governance (Network Safety)
+### C. Egress Governance (Network Safety)
 What’s the problem?
 Agents may:
 
@@ -298,4 +278,4 @@ The Big Picture
 Even with perfect sandboxes and supply chain controls, agents can still write bad logic or call dangerous internal tools.
 So after securing the environment, we must secure the application layer next.
 
-(…content continues exactly as provided…)
+
