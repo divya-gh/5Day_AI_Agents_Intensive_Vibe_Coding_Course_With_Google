@@ -1,4 +1,3 @@
-# 1. Introduction
 
 ## ⭐ Recommendation
 Use this rule:
@@ -10,288 +9,233 @@ Open Git Bash from anywhere — Start Menu is easiest.
 Open Git Bash inside your project folder.
 
 
-A gentle, beginner‑friendly rewrite of this page — keeping the same heading — and turning it into a clear, step‑by‑step guide you can follow without guessing.
 
-What This Page Means (Simple Explanation)
-You already built and deployed an Ambient Expense Agent in the previous lab.
-Now you’re going to build a frontend dashboard so humans (managers) can approve or reject high‑value expenses.
+# 1. Introduction
 
-This dashboard will run on Cloud Run, talk to your Agent Runtime, and use Pub/Sub for event-driven communication.
+### Build a frontend dashboard so humans (managers) can approve or reject high‑value expenses.
 
-Beginner-Friendly Step‑by‑Step Guide
-Step 1 — Confirm You Finished the Previous Lab
-Make sure your Ambient Expense Agent is already deployed to Agent Runtime.
+**This dashboard will run on Cloud Run, talk to your Agent Runtime, and use Pub/Sub for event-driven communication.**
 
-You should have:
+## Step 1 — Confirm we Finished the Previous Lab
+- Make sure your Ambient Expense Agent is already deployed to Agent Runtime.
+- You should have:
 
-Your Google Cloud project ID
-
-Your Agent Runtime ID
-
+  - Your Google Cloud project ID
+  - Your Agent Runtime ID
 If not, go back and complete the “Deploy an ADK agent to Agent Runtime using Agents CLI” codelab.
 
-Why this matters:  
-The dashboard you build in this lab needs a live agent to talk to. Without the deployed agent, nothing will work.
+## Why this matters:  
 
-Step 2 — Understand What You’re Building
-You will create a Manager Dashboard that does four things:
+**The dashboard you build in this lab needs a live agent to talk to. Without the deployed agent, nothing will work.**
 
-Receives expense events through Pub/Sub
+## Step 2 — Understand What we are Building
 
-Auto‑approves expenses under $100
+**create a Manager Dashboard that does four things:**
+- Receives expense events through Pub/Sub
+- Auto‑approves expenses under $100
+- Pauses high‑value expenses (≥ $100) for human review
+- Lets a manager click Approve/Reject to resume the agent’s workflow
 
-Pauses high‑value expenses (≥ $100) for human review
+## Why this matters:  
 
-Lets a manager click Approve/Reject to resume the agent’s workflow
+**This is a real production pattern:**
+- cheap things → auto‑approve
+- expensive things → human approval
+- everything → event-driven, scalable, asynchronous
 
-Why this matters:  
-This is a real production pattern:
+## Step 3 — Know the Architecture (High-Level)
 
-cheap things → auto‑approve
+**Here’s the flow:**
+- Pub/Sub publishes expense events
+- Agent Runtime processes them
 
-expensive things → human approval
+  - If the amount is < $100, the agent approves automatically
+  - If the amount is ≥ $100, the agent pauses and stores the session
+- Cloud Run dashboard shows these paused sessions
+- A manager clicks Approve or Reject
+- The agent continues execution
 
-everything → event-driven, scalable, asynchronous
+## Why this matters:  
 
-Step 3 — Know the Architecture (High-Level)
-Here’s the flow in plain English:
+**This is the “front door” for our agent — the part humans will actually use.**
 
-Pub/Sub publishes expense events
+## Step 4 — Make Sure You Have the Required Tools Installed
 
-Agent Runtime processes them
+#### We need:
+- A Google Cloud project with billing enabled
+- A deployed Ambient Expense Agent
+- A terminal with:
 
-If the amount is < $100, the agent approves automatically
+  - gcloud CLI
+  - Python 3.11+
+  - uv (Python package manager)
+  - Antigravity installed (Google’s agentic IDE)
 
-If the amount is ≥ $100, the agent pauses and stores the session
+## Why this matters:  
 
-Your Cloud Run dashboard shows these paused sessions
-
-A manager clicks Approve or Reject
-
-The agent continues execution
-
-Why this matters:  
-This is the “front door” for your agent — the part humans will actually use.
-
-Step 4 — Make Sure You Have the Required Tools Installed
-You need:
-
-A Google Cloud project with billing enabled
-
-A deployed Ambient Expense Agent
-
-A terminal with:
-
-gcloud CLI
-
-Python 3.11+
-
-uv (Python package manager)
-
-Antigravity installed (Google’s agentic IDE)
-
-Why this matters:  
-These tools let you vibecode, deploy, and connect your dashboard to the cloud.
+**These tools lets us vibecode, deploy, and connect your dashboard to the cloud.**
 
 -------------------------------------------------------------------------------
 
 # 2. Reconnect Antigravity and Confirm Deployment
-Here’s a clean, beginner‑friendly rewrite of this page — keeping the same heading — and turning it into a clear, step‑by‑step guide you can follow confidently.
 
-What This Page Means (Simple Explanation)
-You’re reopening your project in Antigravity and making sure everything is still connected:
+#### Reopen the project in Antigravity and making sure everything is still connected:
+- Antigravity has the right ADK skills loaded
+- Google Cloud environment is connected
+- Antigravity knows which agent we already deployed
+This ensures the dashboard we build next will connect to the correct agent and project.
 
-Antigravity has the right ADK skills loaded
+## Step 1 — Open Your Project in Antigravity
+- Launch Antigravity
+- Open the same project folder you used in the previous lab
 
-Your Google Cloud environment is connected
+#### This folder should contain:
+- Your agent code
+- deployment_metadata.json
+- Any previous ADK scaffolding
 
-Antigravity knows which agent you already deployed
+## Why this matters:  
 
-This ensures the dashboard you build next will connect to the correct agent and project.
+**Antigravity needs our existing project to locate our deployed agent and continue building on top of it.**
 
-Beginner-Friendly Step‑by‑Step Guide
-Step 1 — Open Your Project in Antigravity
-Launch Antigravity
-
-Open the same project folder you used in the previous lab
-
-This folder should contain:
-
-Your agent code
-
-deployment_metadata.json
-
-Any previous ADK scaffolding
-
-Why this matters:  
-Antigravity needs your existing project to locate your deployed agent and continue building on top of it.
-
-Step 2 — Reload ADK Skills in Antigravity
-Send this prompt inside Antigravity:
-
-Code
+## Step 2 — Reload ADK Skills in Antigravity
+- Send this prompt inside Antigravity:
+```
 Reload your adk-scaffold skill and verify that the required ADK skills for this lab are active.
-What will happen:
+```
 
-Antigravity reloads the ADK skills
+## What will happen:
+- Antigravity reloads the ADK skills
+- It checks that skills like adk-scaffold, adk-session, and others are active
+- It confirms it’s ready to work with ADK session services
 
-It checks that skills like adk-scaffold, adk-session, and others are active
+## Why this matters:  
 
-It confirms it’s ready to work with ADK session services
+**These skills allow Antigravity to generate code for Pub/Sub, Cloud Run, and the dashboard.**
 
-Why this matters:  
-These skills allow Antigravity to generate code for Pub/Sub, Cloud Run, and the dashboard.
-
-Step 3 — Connect Antigravity to Your Google Cloud Project
-Send this prompt inside Antigravity (replace YOUR_PROJECT_ID):
-
-Code
+## Step 3 — Connect Antigravity to Your Google Cloud Project
+- Send this prompt inside Antigravity (replace YOUR_PROJECT_ID):
+```
 Help me set up my Google Cloud environment. Connect to my project `YOUR_PROJECT_ID`
 in the global region, authenticate, and enable the necessary generative platform APIs
 (aiplatform.googleapis.com, run.googleapis.com, pubsub.googleapis.com, cloudbuild.googleapis.com).
-What will happen:  
-Antigravity will run commands to:
+```
 
-Set your active project
+## What will happen:  
+#### Antigravity will run commands to:
+- Set our active project
+- Authenticate our gcloud session
+- Enable required APIs:
 
-Authenticate your gcloud session
+  - AI Platform
+  - Cloud Run
+  - Pub/Sub
+  - Cloud Build
 
-Enable required APIs:
+## Why this matters:  
 
-AI Platform
+**Our dashboard will run on Cloud Run and communicate with your agent through Pub/Sub. These APIs must be enabled.**
 
-Cloud Run
-
-Pub/Sub
-
-Cloud Build
-
-Why this matters:  
-Your dashboard will run on Cloud Run and communicate with your agent through Pub/Sub. These APIs must be enabled.
-
-Step 4 — Confirm Your Deployed Agent
-Send this prompt inside Antigravity:
-
-Code
+## Step 4 — Confirm Your Deployed Agent
+- Send this prompt inside Antigravity:
+```
 Get the already running expense agent from Agent Runtime
 by checking the deployment metadata in this project. We are NOT changing the agent's code
 in this lab. We are building a Pub/Sub event pipeline and a Manager Dashboard in front of it.
 Wait for more instructions before proceeding.
-What will happen:  
-Antigravity will:
+```
 
-Read your deployment_metadata.json
+## What will happen:  
 
-Find your Agent Runtime ID
+#### Antigravity will:
+- Read our deployment_metadata.json
+- Find our Agent Runtime ID
+- Confirm our agent is already deployed
+- Acknowledge that we are not modifying the agent code
+- Prepare to build the event pipeline + dashboard
 
-Confirm your agent is already deployed
+## bWhy this matters:  
 
-Acknowledge that you are not modifying the agent code
+**Our dashboard must connect to the correct agent. This step ensures Antigravity knows exactly which one.**
 
-Prepare to build the event pipeline + dashboard
+## Step 5 — Approve Antigravity’s Plans
 
-Why this matters:  
-Your dashboard must connect to the correct agent. This step ensures Antigravity knows exactly which one.
+#### Throughout this lab, Antigravity may show:
+- Implementation plans
+- Pop‑ups
+- Code previews
+- Always review and click Approve so it can continue.
 
-Step 5 — Approve Antigravity’s Plans
-Throughout this lab, Antigravity may show:
+## Step 6 — Quota Tip
 
-Implementation plans
+#### If Antigravity says you’re out of quota:
+- Switch to another model (e.g., gemini-2.5-pro, gemini-3-flash)
+- This keeps your workflow moving.
 
-Pop‑ups
-
-Code previews
-
-Always review and click Approve so it can continue.
-
-Step 6 — Quota Tip
-If Antigravity says you’re out of quota:
-
-Switch to another model (e.g., gemini-2.5-pro, gemini-3-flash)
-
-This keeps your workflow moving.
-
-Image- deploy1
+<img src=".././Images/deploy1.png" width="600" height="300">
 
 -------------------------------------------------------------------------------
 
 # 3. Vibecode a Frontend Dashboard for the Expense Agent
-Here’s your clean, beginner‑friendly, step‑by‑step guide — keeping the same heading — and turning this page into something you can follow without guessing.
 
-What This Page Means (Simple Explanation)
-Your agent already pauses when an expense ≥ $100 needs human approval.
-But right now, there’s no UI for a manager to see those paused sessions or approve/reject them.
+**Our agent already pauses when an expense ≥ $100 needs human approval.**
 
-So in this step, you will guide Antigravity to vibe‑code a full FastAPI web app that:
+**But right now, there’s no UI for a manager to see those paused sessions or approve/reject them.**
 
-Shows pending approvals in a beautiful dashboard
+#### So in this step, we will guide Antigravity to vibe‑code a full FastAPI web app that:
+- Shows pending approvals in a beautiful dashboard
+- Lets managers click Approve or Reject
+- Resumes the paused agent session on Agent Runtime
+- Reads your GCP project + Agent Runtime ID from environment variables
+- This becomes the Manager Dashboard — the human-facing front door to your agent.
 
-Lets managers click Approve or Reject
+## Step 1 — Understand Why You Need a Dashboard
 
-Resumes the paused agent session on Agent Runtime
+#### When an expense is ≥ $100:
+- The agent pauses at a RequestInput node
+- The session is stored in Session Service
+- Nothing continues until a human approves or rejects
 
-Reads your GCP project + Agent Runtime ID from environment variables
+## Why this matters:  
 
-This becomes the Manager Dashboard — the human-facing front door to your agent.
+**Without a dashboard, you’d have to manually inspect sessions and resume them via API calls.**
+- The dashboard automates all of this.
 
-Beginner-Friendly Step‑by‑Step Guide
-Step 1 — Understand Why You Need a Dashboard
-When an expense is ≥ $100:
+## Step 2 — Know What You’re About to Build
+**Ask Antigravity to generate a standalone FastAPI service inside a new folder:**
 
-The agent pauses at a RequestInput node
+- submission_frontend/
 
-The session is stored in Session Service
-
-Nothing continues until a human approves or rejects
-
-Why this matters:  
-Without a dashboard, you’d have to manually inspect sessions and resume them via API calls.
-The dashboard automates all of this.
-
-Step 2 — Know What You’re About to Build
-You will ask Antigravity to generate a standalone FastAPI service inside a new folder:
-
-Code
-submission_frontend/
-This service will include:
+#### This service will include:
 
 1. GET /
 Serves a premium, glassmorphic HTML dashboard
-
 Uses Google Fonts (Outfit or Inter)
-
 Dark theme, glows, blurred cards
-
 Shows pending approvals as interactive cards
-
 Approve/Reject buttons with animations + spinners
-
 A slide‑out modal showing the agent’s final compliance review
 
 2. GET /api/pending
+
 Queries VertexAiSessionService
-
 Lists all sessions
-
 Finds unresolved adk_request_input events
 
 Returns:
 
 session_id
-
 interrupt_id
-
 expense payload
 
 3. POST /api/action/{session_id}
-Resumes the paused session
 
+Resumes the paused session
 Sends a function_response payload directly
 
 Must include:
 
 role: user
-
 parts: [function_response: {...}]
 
 Must set:
@@ -300,30 +244,29 @@ user_id = "default-user"
 (This avoids session ownership errors.)
 
 4. Environment Variables
+
 The service must read:
 
 GCP_PROJECT
-
 AGENT_RUNTIME_ID
 
 5. pyproject.toml
+
 Must include:
 
 fastapi
-
 uvicorn
-
 google-adk
-
 google-cloud-aiplatform
 
-Why this matters:  
+
+## Why this matters:  
 This ensures your dashboard can talk to Agent Runtime and Session Service.
 
-Step 3 — Send This Prompt to Antigravity
-Paste this exact prompt into Antigravity:
+## Step 3 — Send This Prompt to Antigravity
+- Paste this exact prompt into Antigravity:
 
-Code
+```
 Vibe-code a standalone manager-dashboard service in a new folder
 "submission_frontend/". I want:
 
@@ -336,197 +279,165 @@ Vibe-code a standalone manager-dashboard service in a new folder
   - A pyproject.toml with fastapi, uvicorn, google-adk, and google-cloud-aiplatform.
 
 Make sure the UI looks highly polished and premium (colors, transitions, interactive approve/reject actions with loading spinners, and a modal that slides out to display the agent's final compliance review). Show me the main.py implementation when done.
-Step 4 — What You Should Expect Antigravity to Do
-Antigravity will:
+```
 
-Create a new folder: submission_frontend/
+## Step 4 — What You Should Expect Antigravity to Do
 
-Generate:
+#### Antigravity will:
+- Create a new folder: submission_frontend/
+- Generate:
 
-pyproject.toml
+  - pyproject.toml
+  - main.py
+  - HTML/CSS/JS for the dashboard
+  - Implement all three endpoints
+  - dd premium UI styling
+  - Show you the generated main.py for review
 
-main.py
-
-HTML/CSS/JS for the dashboard
-
-Implement all three endpoints
-
-Add premium UI styling
-
-Show you the generated main.py for review
-
-Why this matters:  
-This is the entire frontend layer of your agent system.
-
-Image - 
+## Why this matters:  
+- This is the entire frontend layer of your agent system.
 
 -------------------------------------------------------------------------------------
 
 # 4. Deploy the Dashboard to Cloud Run
-Here’s your clean, beginner‑friendly, step‑by‑step guide — keeping the same heading — rewritten so you can follow it confidently without guessing.
 
-What This Page Means (Simple Explanation)
-You’ve already built your FastAPI dashboard in the submission_frontend/ folder.
-Now you need to deploy it to Cloud Run, which gives you:
+**We’ve already built your FastAPI dashboard in the submission_frontend/ folder.Now we need to deploy it to Cloud Run, which gives us:**
 
-A public HTTPS URL for your dashboard
+- A public HTTPS URL for your dashboard
+- Automatic scaling
+- Zero server management
+- A secure identity (service account) that can talk to Agent Runtime
+- Because the dashboard needs to query paused sessions and resume the agent, its Cloud Run service account must be granted the IAM role:
 
-Automatic scaling
-
-Zero server management
-
-A secure identity (service account) that can talk to Agent Runtime
-
-Because the dashboard needs to query paused sessions and resume the agent, its Cloud Run service account must be granted the IAM role:
-
-Code
+```
 roles/aiplatform.user
+```
 This gives it permission to interact with the Agent Platform.
 
-Beginner-Friendly Step‑by‑Step Guide
-Step 1 — Understand Why Cloud Run Is the Right Choice
-Cloud Run gives you:
+## Step 1 — Understand Why Cloud Run Is the Right Choice
 
-A globally accessible dashboard
+#### Cloud Run gives you:
+- A globally accessible dashboard
+- HTTPS by default
+- Automatic scaling
+- A secure service account identity
+- Easy environment variable injection
 
-HTTPS by default
+## Why this matters:  
 
-Automatic scaling
+**Our dashboard must be reachable by managers and must securely talk to Agent Runtime and Session Service.**
 
-A secure service account identity
+## Step 2 — Know What You’re Deploying
 
-Easy environment variable injection
-
-Why this matters:  
-Your dashboard must be reachable by managers and must securely talk to Agent Runtime and Session Service.
-
-Step 2 — Know What You’re Deploying
-You will deploy:
-
-Code
+##### We will deploy:
+```
 submission_frontend/
-as a Cloud Run service named:
+```
 
-Code
+##### as a Cloud Run service named:
+```
 expense-manager-dashboard
-You must pass two environment variables:
+```
 
-GOOGLE_CLOUD_PROJECT
+##### We must pass two environment variables:
+- GOOGLE_CLOUD_PROJECT
+- AGENT_RUNTIME_ID
+And we must allow unauthenticated access so managers can open the dashboard without logging in.
 
-AGENT_RUNTIME_ID
+## Step 3 — Send This Prompt to Antigravity
+- Paste this exact prompt into Antigravity:
 
-And you must allow unauthenticated access so managers can open the dashboard without logging in.
-
-Step 3 — Send This Prompt to Antigravity
-Paste this exact prompt into Antigravity:
-
-Code
+```
 Deploy the submission_frontend folder as "expense-manager-dashboard" to Cloud Run. Pass
 GOOGLE_CLOUD_PROJECT, and AGENT_RUNTIME_ID as environment variables, and configure the deployment to allow unauthenticated invocations so it is publicly reachable. After it deploys, grant the dashboard's runtime service account the necessary roles on the project so it can resume the Agent
 Runtime agent and query its sessions. Print the Dashboard URL when done.
-Step 4 — What Antigravity Will Do for You
-Antigravity will automatically:
+```
 
-Package your FastAPI app
+## Step 4 — What Antigravity Will Do for You
 
-Build a container image
-
-Upload it to Artifact Registry
-
-Deploy it to Cloud Run
-
-Set environment variables
-
-Allow public access
-
-Create the service
-
-Identify the runtime service account
-
-Usually something like:
+##### Antigravity will automatically:
+- Package your FastAPI app
+- Build a container image
+- Upload it to Artifact Registry
+- Deploy it to Cloud Run
+- Set environment variables
+- Allow public access
+- Create the service
+- Identify the runtime service account
+  - Usually something like:
+```
 service-<PROJECT_NUMBER>@serverless.gserviceaccount.com
+```
+- Grant IAM permissions
+- Assign roles/aiplatform.user
 
-Grant IAM permissions
+##### This allows the dashboard to:
+- Query paused sessions
+- Resume agent execution
+- Print the live HTTPS URL
+- This is your Manager Dashboard
+- You can open it immediately
 
-Assign roles/aiplatform.user
+## Why this matters:  
 
-This allows the dashboard to:
-
-Query paused sessions
-
-Resume agent execution
-
-Print the live HTTPS URL
-
-This is your Manager Dashboard
-
-You can open it immediately
-
-Why this matters:  
-Without IAM permissions, your dashboard would deploy but fail to interact with the agent.
+**Without IAM permissions, your dashboard would deploy but fail to interact with the agent.**
 
 ------------------------------------------------------------------------------------
 
 # 5. Build the Pub/Sub topic
-What this page is really about
-You’re wiring up the messaging backbone for your expense system:
 
-One main topic for incoming expense events
+##### Wiring up the messaging backbone for our expense system:
+- One main topic for incoming expense events
+- One dead-letter topic (DLT) for messages that can’t be processed correctly
+This makes our architecture asynchronous, reliable, and decoupled—the agent can process expenses at its own pace.
 
-One dead-letter topic (DLT) for messages that can’t be processed correctly
-
-This makes your architecture asynchronous, reliable, and decoupled—the agent can process expenses at its own pace.
-
-Step‑by‑step guide for beginners
-Step 1 — Understand the two topics you’re creating
-expense-reports
-
-Main topic where all expense events are published.
-
-Every new expense report → message to this topic.
-
-expense-reports-dead-letter
-
-Backup topic for failed messages.
-
+## Step 1 — Understand the two topics you’re creating
+- expense-reports
+- Main topic where all expense events are published.
+- Every new expense report → message to this topic.
+- expense-reports-dead-letter
+- Backup topic for failed messages.
 If a message keeps failing, it’s moved here instead of disappearing.
 
-Why this matters:  
-You never silently lose events. Anything that breaks ends up in the dead-letter topic for later inspection.
+## Why this matters:  
+**Never silently lose events. Anything that breaks ends up in the dead-letter topic for later inspection.**
 
-Step 2 — Open a terminal with gcloud configured
-Make sure:
-
-You’re in a terminal where gcloud is installed.
-
-Your active project is set to the same project as your agent:
+## Step 2 — Open a terminal with gcloud configured
+##### Make sure:
+- We're in a terminal where gcloud is installed.
+- Our active project is set to the same project as your agent:
 
 bash
+```
 gcloud config get-value project
-If it’s wrong, set it:
+```
 
+##### If it’s wrong, set it:
 bash
+```
 gcloud config set project YOUR_PROJECT_ID
-Step 3 — Ask Antigravity to create both topics
-Paste this prompt into Antigravity:
+```
 
-text
+## Step 3 — Ask Antigravity to create both topics
+- Paste this prompt into Antigravity:
+
+```
 Create the Pub/Sub topics for my event pipeline. I want:
   1. A Pub/Sub topic called "expense-reports" for incoming expense events.
   2. A dead-letter topic called "expense-reports-dead-letter" so messages that fail repeatedly don't get lost.
 
 Use gcloud commands. Walk me through each one before you run it.
-Step 4 — What Antigravity should walk you through
-Antigravity should:
+```
 
-Explain the plan
+## Step 4 — What Antigravity should walk you through
 
-It will describe that it’s going to run two gcloud pubsub topics create commands.
-
-Create the main topic
+##### Antigravity should:
+- Explain the plan
+- It will describe that it’s going to run two gcloud pubsub topics create commands.
+- Create the main topic
 
 Something like:
-
+```
 bash
 gcloud pubsub topics create expense-reports
 Create the dead-letter topic
@@ -542,313 +453,265 @@ And you should see:
 projects/YOUR_PROJECT_ID/topics/expense-reports
 
 projects/YOUR_PROJECT_ID/topics/expense-reports-dead-letter
+```
 
-Why this matters:  
-These topics will later be wired into your event pipeline so that:
+## Why this matters:  
 
-Your dashboard/clients publish to expense-reports.
-
-Any repeatedly failing messages are routed to expense-reports-dead-letter.
+##### These topics will later be wired into our event pipeline so that:
+- Our dashboard/clients publish to expense-reports.
+- Any repeatedly failing messages are routed to expense-reports-dead-letter.
 
 -----------------------------------------------------------------------------
 
 # 6. Wire Pub/Sub to Agent Runtime
 
 ## What this page is really about
-You already have:
 
-A Pub/Sub topic (expense-reports)
+### We already have:
+- A Pub/Sub topic (expense-reports)
+- A deployed agent on Agent Runtime
 
-A deployed agent on Agent Runtime
-
-Now you’ll connect them directly so that:
-
-Pub/Sub pushes expense messages straight to the agent’s :query API
-
-No Cloud Function / Cloud Run “middleman” is needed
-
-Messages are delivered as raw JSON (no Pub/Sub wrapper)
-
-Failures are retried and then sent to your dead-letter topic
-
+#### Now you’ll connect them directly so that:
+- Pub/Sub pushes expense messages straight to the agent’s :query API
+- No Cloud Function / Cloud Run “middleman” is needed
+- Messages are delivered as raw JSON (no Pub/Sub wrapper)
+- Failures are retried and then sent to your dead-letter topic
 This is the final glue that makes your event-driven system actually run.
 
-Step‑by‑step guide for beginners
-Step 1 — Understand the pieces you’re wiring together
-You will create:
+## Step 1 — Understand the pieces you’re wiring together
 
-A service account
+#### You will create:
+- A service account
+  - Name: pubsub-invoker
+- Used by Pub/Sub to authenticate when calling Agent Runtime.
+- Permissions for that service account
+- It must be allowed to invoke and query our Agent Runtime agent.
+- This is done via roles/aiplatform.user.
+- An OIDC-authenticated push subscription
+  - Name: expense-reports-push
+  - Source topic: expense-reports
+  - Target: Agent Runtime :query REST endpoint
 
-Name: pubsub-invoker
+#### Uses:
+- OIDC for auth
+- --push-no-wrapper to send raw JSON
 
-Used by Pub/Sub to authenticate when calling Agent Runtime.
+- 10-minute ack deadline
+- Dead-letter topic after 5 failures
 
-Permissions for that service account
+## Why this matters:  
 
-It must be allowed to invoke and query your Agent Runtime agent.
+**This setup lets Pub/Sub safely and directly call your agent with the exact payload shape it expects.**
 
-This is done via roles/aiplatform.user.
+## Step 2 — Send the wiring prompt to Antigravity
+- Paste this exact prompt into Antigravity:
 
-An OIDC-authenticated push subscription
-
-Name: expense-reports-push
-
-Source topic: expense-reports
-
-Target: Agent Runtime :query REST endpoint
-
-Uses:
-
-OIDC for auth
-
---push-no-wrapper to send raw JSON
-
-10-minute ack deadline
-
-Dead-letter topic after 5 failures
-
-Why this matters:  
-This setup lets Pub/Sub safely and directly call your agent with the exact payload shape it expects.
-
-Step 2 — Send the wiring prompt to Antigravity
-Paste this exact prompt into Antigravity:
-
-text
+```
 Create the authenticated Pub/Sub push subscription pointing directly to Agent Runtime. I want:
   1. A service account called "pubsub-invoker" for Pub/Sub push authentication.
   2. Permission granted to that service account to query and invoke my Agent Runtime agent.
   3. The OIDC-authenticated push subscription "expense-reports-push" delivering directly to the Agent Runtime's :query REST API, using `--push-no-wrapper` to unwrap the payload, and configured with a 10-minute ack deadline and a dead-letter topic after 5 failed attempts.
 
 Use gcloud commands. Walk me through each one before running.
-Tell Antigravity to walk you through each command before it executes.
+```
 
-Step 3 — What Antigravity should do (and why each step matters)
-1. Create the pubsub-invoker service account
+## Step 3 — What Antigravity should do (and why each step matters)
+
+### 1. Create the pubsub-invoker service account
 It will run something like:
-
-bash
+```
 gcloud iam service-accounts create pubsub-invoker \
   --display-name="Pub/Sub Invoker for Agent Runtime"
-Why:  
+```
+#### Why:  
+
 Pub/Sub needs an identity to authenticate when calling your agent.
 
-2. Grant it permission to invoke your agent
+### 2. Grant it permission to invoke your agent
 It will assign:
 
-bash
+```
 gcloud projects add-iam-policy-binding YOUR_PROJECT_ID \
   --member="serviceAccount:pubsub-invoker@YOUR_PROJECT_ID.iam.gserviceaccount.com" \
   --role="roles/aiplatform.user"
-Why:  
+```
+#### Why:  
+
 roles/aiplatform.user lets this service account call the Agent Runtime :query API and interact with sessions.
 
-3. Allow Pub/Sub to mint OIDC tokens for that service account
+### 3. Allow Pub/Sub to mint OIDC tokens for that service account
 It will grant the Pub/Sub service agent:
 
-bash
+```
 gcloud iam service-accounts add-iam-policy-binding \
   pubsub-invoker@YOUR_PROJECT_ID.iam.gserviceaccount.com \
   --member="serviceAccount:service-PROJECT_NUMBER@gcp-sa-pubsub.iam.gserviceaccount.com" \
   --role="roles/iam.serviceAccountTokenCreator"
-Why:  
+```
+
+#### Why:  
+
 Pub/Sub uses this permission to generate OIDC tokens on behalf of pubsub-invoker when pushing messages.
 
-4. Read your Agent Runtime ID and build the target URL
+### 4. Read your Agent Runtime ID and build the target URL
 Antigravity will:
+- Read deployment_metadata.json
+- Extract your Agent Runtime ID
+- Construct the :query endpoint, something like:
 
-Read deployment_metadata.json
-
-Extract your Agent Runtime ID
-
-Construct the :query endpoint, something like:
-
-text
+```
 https://LOCATION-aiplatform.googleapis.com/v1/projects/PROJECT_ID/locations/LOCATION/agents/AGENT_RUNTIME_ID:query
-Why:  
+```
+
+#### Why: 
+
 This is the exact REST endpoint Pub/Sub will call.
 
-5. Create the expense-reports-push subscription
+### 5. Create the expense-reports-push subscription
+
 It will run a gcloud pubsub subscriptions create command that:
+- Uses topic: expense-reports
+- Sets push endpoint: Agent Runtime :query URL
+- Uses OIDC with pubsub-invoker
+- Enables --push-no-wrapper
 
-Uses topic: expense-reports
+#### Sets:
+- --ack-deadline=600 (10 minutes)
+- Dead-letter topic: expense-reports-dead-letter
+- Max delivery attempts: 5
 
-Sets push endpoint: Agent Runtime :query URL
+#### Why each flag matters:
+- OIDC auth: Secure, identity-based access to your agent.
+- --push-no-wrapper: Sends the raw JSON expense payload, not the Pub/Sub envelope.
+- 10-minute ack deadline: Gives the LLM enough time for complex reasoning.
+- Dead-letter after 5 attempts: Failed messages are preserved for debugging instead of disappearing.
 
-Uses OIDC with pubsub-invoker
+## Step 4 — Confirm everything is wired
 
-Enables --push-no-wrapper
+**Once Antigravity finishes, you should have:**
+- Service account: pubsub-invoker
+- IAM bindings:
+ - roles/aiplatform.user on your project
+ - roles/iam.serviceAccountTokenCreator for the Pub/Sub service agent
+ - Subscription: expense-reports-push
+ - Push endpoint = Agent Runtime :query
+ - Dead-letter topic = expense-reports-dead-letter
 
-Sets:
+#### At this point, your architecture is fully event-driven:
+- Expense event → expense-reports topic
+- Pub/Sub → pushes JSON directly to Agent Runtime
 
---ack-deadline=600 (10 minutes)
+### Agent runs:
 
-Dead-letter topic: expense-reports-dead-letter
-
-Max delivery attempts: 5
-
-Why each flag matters:
-
-OIDC auth: Secure, identity-based access to your agent.
-
---push-no-wrapper: Sends the raw JSON expense payload, not the Pub/Sub envelope.
-
-10-minute ack deadline: Gives the LLM enough time for complex reasoning.
-
-Dead-letter after 5 attempts: Failed messages are preserved for debugging instead of disappearing.
-
-Step 4 — Confirm everything is wired
-Once Antigravity finishes, you should have:
-
-Service account: pubsub-invoker
-
-IAM bindings:
-
-roles/aiplatform.user on your project
-
-roles/iam.serviceAccountTokenCreator for the Pub/Sub service agent
-
-Subscription: expense-reports-push
-
-Push endpoint = Agent Runtime :query
-
-Dead-letter topic = expense-reports-dead-letter
-
-At this point, your architecture is fully event-driven:
-
-Expense event → expense-reports topic
-
-Pub/Sub → pushes JSON directly to Agent Runtime
-
-Agent runs:
-
-Auto-approves < $100
-
-Pauses ≥ $100
-
-Manager Dashboard → resumes paused sessions
+  - Auto-approves < $100
+  - Pauses ≥ $100
+  - Manager Dashboard → resumes paused sessions
 
 ------------------------------------------------------------------------------
 
 # 7. Review the End‑to‑End Architecture
-Here’s your clean, beginner‑friendly rewrite — keeping the same heading — turning this page into a clear, intuitive walkthrough of how everything you built now works together.
-
-What This Page Means (Simple Explanation)
-You’ve assembled several moving parts:
-
-A Pub/Sub topic
-
-A push subscription
-
-An AI agent running on Agent Runtime
-
-A Cloud Run dashboard
-
-The Session Service
-
+**We’ve assembled several moving parts:**
+- A Pub/Sub topic
+- A push subscription
+- An AI agent running on Agent Runtime
+- A Cloud Run dashboard
+- The Session Service
 This step helps you see the whole system as one connected flow before you start testing.
 
-Beginner‑Friendly Step‑by‑Step Understanding of the Architecture
-Step 1 — Start With the Ingestion Layer (Pub/Sub)
-When someone submits an expense report:
+## Step 1 — Start With the Ingestion Layer (Pub/Sub)
 
-The event is published to the expense-reports Pub/Sub topic.
+#### When someone submits an expense report:
+- The event is published to the expense-reports Pub/Sub topic.
+- Pub/Sub immediately pushes the raw JSON payload to your agent’s :query endpoint.
 
-Pub/Sub immediately pushes the raw JSON payload to your agent’s :query endpoint.
+### This happens because we configured:
+- A push subscription
+- OIDC authentication
+- --push-no-wrapper (so the agent receives clean JSON)
 
-This happens because you configured:
-
-A push subscription
-
-OIDC authentication
-
---push-no-wrapper (so the agent receives clean JSON)
-
-Why this matters:  
+## Why this matters:  
 The caller doesn’t wait. The system is fully asynchronous and scalable.
 
-Step 2 — Let the Agent Decide What Happens Next
-Inside Agent Runtime:
+## Step 2 — Let the Agent Decide What Happens Next
 
-If the expense is < $100  
-→ The agent auto‑approves and finishes instantly.
+#### Inside Agent Runtime:
 
-If the expense is ≥ $100  
-→ The agent pauses at a RequestInput node
-→ It saves the session state in the Session Service
+**If the expense is < $100**
+  → The agent auto‑approves and finishes instantly.
 
-Why this matters:  
-This is the human‑in‑the‑loop checkpoint that ensures oversight for high‑value expenses.
+**If the expense is ≥ $100**
+  → The agent pauses at a RequestInput node
+  → It saves the session state in the Session Service
 
-Step 3 — The Dashboard Handles the Human Review Loop
-Your Cloud Run dashboard:
+## Why this matters:  
 
-Polls the Session Service
+**This is the human‑in‑the‑loop checkpoint that ensures oversight for high‑value expenses.**
 
-It looks for paused sessions waiting for human input.
+## Step 3 — The Dashboard Handles the Human Review Loop
 
-Displays them in a polished UI
+##### Our Cloud Run dashboard:
+- Polls the Session Service
+- It looks for paused sessions waiting for human input.
+- Displays them in a polished UI
+- Each pending approval appears as a card with Approve/Reject actions.
+- Resumes the agent when a manager clicks a button
+- The dashboard sends a secure, IAM‑authenticated call back to Agent Runtime
+- It includes the correct function_response payload
+- The agent continues execution and completes the workflow
 
-Each pending approval appears as a card with Approve/Reject actions.
+## Why this matters:  
 
-Resumes the agent when a manager clicks a button
+**This is the operational “front door” for managers — the part humans actually interact with.**
 
-The dashboard sends a secure, IAM‑authenticated call back to Agent Runtime
+## Step 4 — See the Whole Flow as One Pipeline
 
-It includes the correct function_response payload
+#### Here’s the full end‑to‑end lifecycle:
 
-The agent continues execution and completes the workflow
+- Expense submitted  
+  → Published to Pub/Sub
 
-Why this matters:  
-This is the operational “front door” for managers — the part humans actually interact with.
+- Pub/Sub pushes event  
+  - → Directly to Agent Runtime (:query)
 
-Step 4 — See the Whole Flow as One Pipeline
-Here’s the full end‑to‑end lifecycle in plain English:
+- Agent evaluates
 
-Expense submitted  
-→ Published to Pub/Sub
+  < $100 → auto‑approve
+  ≥ $100 → pause + save session
 
-Pub/Sub pushes event  
-→ Directly to Agent Runtime (:query)
+- Dashboard polls for paused sessions  
+  → Shows them to the manager
 
-Agent evaluates
+- Manager approves/rejects  
+  → Dashboard resumes the agent
 
-< $100 → auto‑approve
-
-≥ $100 → pause + save session
-
-Dashboard polls for paused sessions  
-→ Shows them to the manager
-
-Manager approves/rejects  
-→ Dashboard resumes the agent
-
-Agent finishes the workflow  
-→ Compliance review, final output, etc.
-
+- Agent finishes the workflow  
+  → Compliance review, final output, etc.
 This is a fully event‑driven, serverless, human‑in‑the‑loop architecture.
 
 ------------------------------------------------------------------------------------
 
 # 8. Run It End to End
-Here’s your clean, beginner‑friendly rewrite — keeping the same heading — turning this page into a clear, step‑by‑step guide you can follow to test your entire event‑driven system in real time.
 
-This is the fun part. You finally get to see everything working together.
+## Step 1 — Open the Manager Dashboard
 
-Step 1 — Open the Manager Dashboard
-1. Ask Antigravity for the live URL
+#### 1. Ask Antigravity for the live URL
 Send this prompt inside Antigravity:
 
-Code
+```
 What is the live HTTPS URL of the deployed "expense-manager-dashboard" Cloud Run service?
-2. Open the URL in your browser
-You should see:
+```
 
-All caught up! No expenses are currently pending manager approval.
+#### 2. Open the URL in your browser
+
+**You should see:**
+
+```All caught up! No expenses are currently pending manager approval.```
 
 This means the dashboard is running and connected to your Session Service.
 
-Troubleshooting (403 Forbidden / Unauthorized)
-If you get an authentication error:
+- Troubleshooting (403 Forbidden / Unauthorized)
+
+#### If you get an authentication error:
 
 Go to Google Cloud Console → Cloud Run
 
@@ -958,4 +821,76 @@ A complete end‑to‑end test suite
 Image -deploy_testing
 ---------------------------------------------------------------------------------
 
-# 
+# 9. Clean Up
+Before you wrap up the codelab, you should delete all cloud resources you created so you don’t incur ongoing charges. This includes your Cloud Run dashboard, Pub/Sub topics, subscriptions, and the service account used for OIDC authentication.
+You may also delete your deployed agent if you choose.
+
+Below is the simplified, actionable guide.
+
+Beginner‑Friendly Step‑by‑Step Guide
+Step 1 — Understand What You’re Deleting
+You will remove:
+
+Cloud Run service
+
+expense-manager-dashboard
+
+Pub/Sub push subscription
+
+expense-reports-push
+
+Pub/Sub topics
+
+expense-reports
+
+expense-reports-dead-letter
+
+Service account
+
+pubsub-invoker@<project>.iam.gserviceaccount.com
+
+These are the core components of your event-driven pipeline.
+
+Step 2 — Send This Prompt to Antigravity
+Paste this into Antigravity:
+
+Code
+Help me clean up the Google Cloud resources created in this lab. Please delete:
+  1. The Cloud Run service "expense-manager-dashboard".
+  2. The Pub/Sub subscription "expense-reports-push".
+  3. The Pub/Sub topics "expense-reports" and "expense-reports-dead-letter".
+  4. The service account "pubsub-invoker".
+
+Use gcloud commands with --quiet to execute the cleanup. Walk me through what you are deleting before running.
+Step 3 — What Antigravity Will Do
+Antigravity will:
+
+Summarize each resource it’s about to delete
+
+Run the appropriate gcloud commands with --quiet
+
+Delete:
+
+Cloud Run service
+
+Pub/Sub subscription
+
+Pub/Sub topics
+
+Service account
+
+Confirm when everything is removed
+
+If you also ask it to delete the agent, it will decommission your Agent Runtime instance as well.
+
+Step 4 — Verify Cleanup (Optional)
+You can manually confirm:
+
+Cloud Run → No service named expense-manager-dashboard
+
+Pub/Sub → No topics or subscriptions named above
+
+IAM → No service account named pubsub-invoker
+
+Agent Runtime → (Only if you asked to delete it)
+
