@@ -298,8 +298,8 @@ description: Use this skill when the user asks to query the database, check tabl
 ---
 ```
 ### Key Fields
-
 <img src=".././Images/skills_yaml_frontmatter.png" width="600" height="300">
+
 
 #### Important Notes
 **name** : 
