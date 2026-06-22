@@ -4,400 +4,345 @@
 ## Goal:  
 You’ll take an ADK 2.0 agent that you’ve been running locally and deploy it to Agent Runtime on Google Cloud using agents-cli.
 
-Big picture:
+## Big picture:
 
-Local → Cloud: Start with a local Ambient Expense Agent and end with it running in the cloud.
+**Local → Cloud:** Start with a `local Ambient Expense Agent` and end with it running in the `cloud.`
 
-Production mindset: You’re not just “running code”; you’re packaging, verifying, deploying, and observing a production‑grade workflow.
+**Production mindset:** You’re not just `“running code”; you’re packaging, verifying, deploying, and observing a production‑grade workflow.`
 
-Tooling: You’ll use Agents CLI, ADK 2.0, and Google Cloud together.
+**Tooling:** You’ll use `Agents CLI, ADK 2.0, and Google Cloud` together.
 
-1. Overview
-1.1 What this lab is about
-Story:  
-You’re working with the Ambient Expense Agent—an ADK 2.0 graph‑based workflow that:
+## 1. Overview
 
-Auto‑approves standard, low‑risk expenses.
+### 1.1 What this lab is about
 
-Flags higher‑risk or large expenses for human‑in‑the‑loop review.
+## Story:  
 
-Uses a graph workflow (nodes, edges, branching) instead of a single monolithic LLM call.
+##### You’re working with the Ambient Expense Agent—an ADK 2.0 graph‑based workflow that:
+- Auto‑approves standard, low‑risk expenses.
+- Flags higher‑risk or large expenses for human‑in‑the‑loop review.
+- Uses a graph workflow (nodes, edges, branching) instead of a single monolithic LLM call.
 
-In this codelab, you:
+### In this codelab, you:
+- Start from a local prototype of this agent.
+- Prepare it for deployment (descriptors, configs, wrappers).
+- Deploy it to Agent Runtime using agents-cli.
+- Inspect traces in Cloud Trace to see how it behaves in production.
 
-Start from a local prototype of this agent.
+## 1.2 What you’ll learn (step‑by‑step view)
 
-Prepare it for deployment (descriptors, configs, wrappers).
+## 1.2.1 Prepare your local Ambient Expense Agent for cloud hosting
 
-Deploy it to Agent Runtime using agents-cli.
+### Step 1: Make sure your Ambient Expense Agent project exists locally (from earlier codelabs).
+### Step 2: Confirm it’s using ADK 2.0 and a graph workflow (function nodes, edges, etc.).
+### Step 3: Clean up the project:
+- Organize code into a clear structure (e.g., agent/, specs/, tests/).
+- Ensure your entrypoint (the main workflow) is clearly defined.
 
-Inspect traces in Cloud Trace to see how it behaves in production.
+### Step 4: Verify it runs locally:
 
-1.2 What you’ll learn (step‑by‑step view)
-1.2.1 Prepare your local Ambient Expense Agent for cloud hosting
-Step 1: Make sure your Ambient Expense Agent project exists locally (from earlier codelabs).
+#### Run your local commands (e.g., make playground or python -m ...) and confirm:
+- The workflow executes.
+- The expense logic (approve vs. escalate) behaves as expected.
 
-Step 2: Confirm it’s using ADK 2.0 and a graph workflow (function nodes, edges, etc.).
+## 1.2.2 Scaffold deployment descriptors and production wrappers
 
-Step 3: Clean up the project:
+### Step 1: Use agents-cli to initialize deployment config (the codelab will give exact commands later, e.g. agents-cli deploy init).
+### Step 2: This usually creates:
 
-Organize code into a clear structure (e.g., agent/, specs/, tests/).
+#### A deployment descriptor (YAML/JSON) describing:
+- Which workflow to run.
+- Which models/tools it uses.
+- Runtime settings (timeouts, environment).
+- Optional wrappers (e.g., HTTP handlers, adapters) that make your workflow callable by Agent Runtime.
 
-Ensure your entrypoint (the main workflow) is clearly defined.
+### Step 3: Open the generated files and:
+- Check model names (e.g., gemini-1.5-flash vs newer).
+- Check environment variables (API keys, project IDs).
+- Align them with your local .env or config.
 
-Step 4: Verify it runs locally:
+## .2.3 Perform dry‑runs and deploy with Agents CLI
 
-Run your local commands (e.g., make playground or python -m ...) and confirm:
+### Step 1: Run a dry‑run deployment:
+- A command like `agents-cli deploy dry-run` (exact syntax will appear later in the codelab).
 
-The workflow executes.
+#### This checks:
+- Config validity.
+- That the workflow can be packaged.
 
-The expense logic (approve vs. escalate) behaves as expected.
+### Step 2: Fix any issues reported:
+- Missing env vars.
+- Invalid model names.
+- Import errors in your Python code.
 
-1.2.2 Scaffold deployment descriptors and production wrappers
-Step 1: Use agents-cli to initialize deployment config (the codelab will give exact commands later, e.g. agents-cli deploy init).
+### Step 3: Run the actual deployment:
+- A command like agents-cli deploy run or similar.
+- This uploads your agent to Agent Runtime in your Google Cloud project.
 
-Step 2: This usually creates:
+### Step 4: Note the deployed agent ID / endpoint—you’ll use this to send requests.
 
-A deployment descriptor (YAML/JSON) describing:
+## 1.2.4 Monitor execution traces in Cloud Trace
 
-Which workflow to run.
+### Step 1: Go to Google Cloud Console → Cloud Trace.
 
-Which models/tools it uses.
+### Step 2: Filter by:
+- Your project.
+- The service/agent name used by the deployment.
 
-Runtime settings (timeouts, environment).
+### Step 3: Trigger your agent:
+- Send a test expense request (the codelab will give you a sample payload).
 
-Optional wrappers (e.g., HTTP handlers, adapters) that make your workflow callable by Agent Runtime.
+### Step 4: Watch the trace:
+- See each node in the graph.
+- Check latency, errors, and branching decisions (approve vs. escalate).
 
-Step 3: Open the generated files and:
+### Step 5: Use this to:
+- Debug mis‑routing.
+- Validate that your production behavior matches your local expectations.
 
-Check model names (e.g., gemini-1.5-flash vs newer).
+## 1.3 What you’ll need 
 
-Check environment variables (API keys, project IDs).
+### 1.3.1 An active Google Cloud project with billing enabled
 
-Align them with your local .env or config.
+#### Why: Agent Runtime and Cloud Trace are Google Cloud services; they need a project with billing.
 
-1.2.3 Perform dry‑runs and deploy with Agents CLI
-Step 1: Run a dry‑run deployment:
+### Checklist:
+- You have a Google Cloud project ID.
+- Billing is enabled for that project.
 
-A command like agents-cli deploy dry-run (exact syntax will appear later in the codelab).
+### 1.3.2 The gcloud SDK installed and authenticated
 
-This checks:
+#### Why: gcloud is your command‑line bridge to Google Cloud.
 
-Config validity.
+### Checklist:
+- gcloud --version works in your terminal.
 
-That the workflow can be packaged.
+### You’ve run:
+- gcloud init (to set project & region).
+- gcloud auth login (to log in).
 
-Step 2: Fix any issues reported:
+#### Your active project is the one you’ll deploy to:
+- gcloud config get-value project
 
-Missing env vars.
+### 1.3.3 The uv package manager installed
 
-Invalid model names.
+#### Why: The course uses uv to manage Python environments and dependencies quickly.
 
-Import errors in your Python code.
+### Checklist:
+- uv --version works.
+- You can run commands like:
+- uv run python main.py
+- uv add <package>
 
-Step 3: Run the actual deployment:
+### 1.3.4 Google Antigravity IDE installed
 
-A command like agents-cli deploy run or similar.
+#### Why: Antigravity is your AI coding environment for:
+- Vibe‑coding the agent.
+- Managing specs and skills.
+- Running local workflows.
 
-This uploads your agent to Agent Runtime in your Google Cloud project.
+### Checklist:
+- You can open Antigravity.
+- You can open your Ambient Expense Agent project folder inside it.
 
-Step 4: Note the deployed agent ID / endpoint—you’ll use this to send requests.
+## 1.4 Prerequisites (what you should already be comfortable with)
 
-1.2.4 Monitor execution traces in Cloud Trace
-Step 1: Go to Google Cloud Console → Cloud Trace.
+### 1.4.1 Terminal navigation
 
-Step 2: Filter by:
+### You should be able to:
+- cd into your project folder.
 
-Your project.
+### Run commands like:
+- ls / dir
+- uv run ...
+- agents-cli ...
 
-The service/agent name used by the deployment.
+### 1.4.2 Basic Python development
 
-Step 3: Trigger your agent:
+### You should understand:
+- How to install dependencies (e.g., via uv or pip).
+- How to run a Python script or module.
+- Basic project structure (packages, modules, imports).
 
-Send a test expense request (the codelab will give you a sample payload).
+### 1.4.3 Fundamental Google Cloud concepts
 
-Step 4: Watch the trace:
-
-See each node in the graph.
-
-Check latency, errors, and branching decisions (approve vs. escalate).
-
-Step 5: Use this to:
-
-Debug mis‑routing.
-
-Validate that your production behavior matches your local expectations.
-
-1.3 What you’ll need (with beginner‑friendly notes)
-1.3.1 An active Google Cloud project with billing enabled
-Why: Agent Runtime and Cloud Trace are Google Cloud services; they need a project with billing.
-
-Checklist:
-
-You have a Google Cloud project ID.
-
-Billing is enabled for that project.
-
-1.3.2 The gcloud SDK installed and authenticated
-Why: gcloud is your command‑line bridge to Google Cloud.
-
-Checklist:
-
-gcloud --version works in your terminal.
-
-You’ve run:
-
-gcloud init (to set project & region).
-
-gcloud auth login (to log in).
-
-Your active project is the one you’ll deploy to:
-
-gcloud config get-value project
-
-1.3.3 The uv package manager installed
-Why: The course uses uv to manage Python environments and dependencies quickly.
-
-Checklist:
-
-uv --version works.
-
-You can run commands like:
-
-uv run python main.py
-
-uv add <package>
-
-1.3.4 Google Antigravity IDE installed
-Why: Antigravity is your AI coding environment for:
-
-Vibe‑coding the agent.
-
-Managing specs and skills.
-
-Running local workflows.
-
-Checklist:
-
-You can open Antigravity.
-
-You can open your Ambient Expense Agent project folder inside it.
-
-1.4 Prerequisites (what you should already be comfortable with)
-1.4.1 Terminal navigation
-You should be able to:
-
-cd into your project folder.
-
-Run commands like:
-
-ls / dir
-
-uv run ...
-
-agents-cli ...
-
-1.4.2 Basic Python development
-You should understand:
-
-How to install dependencies (e.g., via uv or pip).
-
-How to run a Python script or module.
-
-Basic project structure (packages, modules, imports).
-
-1.4.3 Fundamental Google Cloud concepts
-You should roughly know:
-
-What a project is.
-
-That services (like Agent Runtime, Cloud Trace) are enabled per project.
-
-That IAM / permissions control what you can do.
+#### You should roughly know:
+- What a project is.
+- That services (like Agent Runtime, Cloud Trace) are enabled per project.
+- That IAM / permissions control what you can do.
 
 -----------------------------------------------------------------------------
 # 2. Set up your Google Cloud Environment
-(Beginner‑Friendly Step‑By‑Step Guide)
-Before deploying anything, you must configure your Google Cloud project and enable the APIs required for:
 
-Agent Runtime
+**Before deploying anything, you must configure your Google Cloud project and enable the APIs required for:**
 
-Cloud Run
-
-Pub/Sub
-
-Cloud Trace
-
-Generative AI models
-
+- Agent Runtime
+- Cloud Run
+- Pub/Sub
+- Cloud Trace
+- Generative AI models
 You will do this inside Antigravity, but here’s the exact meaning of each step so you understand what’s happening.
 
 ## ✅ 2.1 What You Need Before Running the Prompt
-Make sure you have:
 
-Your Google Cloud Project ID
-
-gcloud installed and working (you already fixed this 🎉)
-
-You are logged in (gcloud auth login)
-
-You have Application Default Credentials (gcloud auth application-default login)
+#### Make sure you have:
+- Your Google Cloud Project ID
+- gcloud installed and working (you already fixed this 🎉)
+- You are logged in (gcloud auth login)
+- You have Application Default Credentials (gcloud auth application-default login)
 
 ## ✅ 2.2 The Prompt You Give to Antigravity
-Inside Antigravity, paste this:
-
-Code
+- Inside Antigravity, paste this:
+```
 Help me set up my Google Cloud environment. Connect to my project
 `YOUR_PROJECT_ID` in the global region, authenticate, and enable the necessary
 generative platform APIs (aiplatform.googleapis.com, cloudtrace.googleapis.com,
 cloudbuild.googleapis.com, agentregistry.googleapis.com).
-Replace:
+```
 
-Code
+### Replace:
+```
 YOUR_PROJECT_ID
 with your actual project ID, e.g.: *****
+```
 
 
 ## ✅ 2.3 What Antigravity Will Do (Behind the Scenes)
-Antigravity will propose and run the following steps:
+**Antigravity will propose and run the following steps:**
 
-1. Set your active project
-Equivalent to:
+### 1. Set your active project
+
+**Equivalent to:**
 
 bash
+```
 gcloud config set project YOUR_PROJECT_ID
+```
 
-## 2. Set region to global
+### 2. Set region to global
 
-Equivalent to:
+**Equivalent to:**
 
 bash
+```
 gcloud config set compute/region global
-3. Authenticate your user
-Antigravity will show a URL like:
+```
+
+### 3. Authenticate your user
+
+**Antigravity will show a URL like:**
 
 Code
+```
 https://accounts.google.com/o/oauth2/auth?...
-You click it → sign in → return to Antigravity.
+```
 
-Equivalent to:
+- You click it → sign in → return to Antigravity.
 
+**Equivalent to:**
 bash
+```
 gcloud auth login
+```
 
+### 4. Enable Application Default Credentials
 
-## 4. Enable Application Default Credentials
-Equivalent to:
+**Equivalent to:**
 
 bash
+```
 gcloud auth application-default login
-5. Enable required APIs
-Antigravity will run commands like:
+```
+
+### 5. Enable required APIs
+- Antigravity will run commands like:
 
 bash
+```
 gcloud services enable aiplatform.googleapis.com
 gcloud services enable cloudtrace.googleapis.com
 gcloud services enable cloudbuild.googleapis.com
 gcloud services enable agentregistry.googleapis.com
-
+```
 
 ## These APIs are required for:
-These APIs are required for:
-
-Agent Runtime
-
-Cloud Trace
-
-Cloud Build
-
-Model execution
+- Agent Runtime
+- Cloud Trace
+- Cloud Build
+- Model execution
 
 ## ⚠️ Important Note (from the codelab)
-If this is a brand‑new Google Cloud project, you may see:
+
+#### If this is a brand‑new Google Cloud project, you may see:
 
 Code
+```
 Service Usage API must be enabled
-If that happens:
+```
 
-Antigravity will show a link
-
-Click it
-
-Enable Service Usage API in the Cloud Console
-
-Return to Antigravity and continue
-
-This is normal.
+#### If that happens:
+- Antigravity will show a link
+- Click it
+- Enable Service Usage API in the Cloud Console
+- Return to Antigravity and continue
+- This is normal.
 
 ## Once Antigravity finishes:
-
-Your project is authenticated
-
-All required APIs are enabled
-
-Your environment variables are set
-
+- Your project is authenticated
+- All required APIs are enabled
+- Your environment variables are set
 You’re ready to build the Manager Dashboard and deploy it to Cloud Run
 ---------------------------------------------------------------------------------
 
 # ⭐ 3. Set up Agents CLI & ADK Skills — What This Step Really Means
-Antigravity needs the Agents CLI toolchain + ADK skills so it can:
 
-Scaffold ADK agent projects
+### Antigravity needs the Agents CLI toolchain + ADK skills so it can:
+- Scaffold ADK agent projects
+- Deploy agents to Agent Runtime
+- Run evaluation workflows
+- Manage your agent lifecycle
+- Understand ADK APIs and patterns
 
-Deploy agents to Agent Runtime
+### When you run the prompt, Antigravity will:
+- Open a terminal
+- Run uvx google-agents-cli setup
 
-Run evaluation workflows
+- nstall the CLI + skills into your environment
+- Run agents-cli info
+- Show you a list of installed skills (e.g., google-agents-cli-deploy, google-agents-cli-workflow, etc.)
+- This equips Antigravity to build and deploy your dashboard later.
 
-Manage your agent lifecycle
+### ⭐ Where do you paste the prompt?
+##### 👉 Paste it in the main Antigravity chat window (Antigravity 2.0)
+**NOT in the IDE.**
+- Same place you pasted the Google Cloud setup prompt.
 
-Understand ADK APIs and patterns
-
-When you run the prompt, Antigravity will:
-
-Open a terminal
-
-Run uvx google-agents-cli setup
-
-Install the CLI + skills into your environment
-
-Run agents-cli info
-
-Show you a list of installed skills (e.g., google-agents-cli-deploy, google-agents-cli-workflow, etc.)
-
-This equips Antigravity to build and deploy your dashboard later.
-
-⭐ Where do you paste the prompt?
-👉 Paste it in the main Antigravity chat window (Antigravity 2.0)
-NOT in the IDE.
-
-Same place you pasted the Google Cloud setup prompt.
-
-⭐ The exact prompt to paste
-Paste this into Antigravity:
+### ⭐ The exact prompt to paste
+#### Paste this into Antigravity:
 
 Code
+```
 Install the agents-cli toolchain and its ADK skills so you can help me build
 an ADK agent. Run "uvx google-agents-cli setup", then confirm with
 "agents-cli info" and tell me which skills are now available.
-Antigravity will:
+```
 
-Show an implementation plan
+## Antigravity will:
+- Show an implementation plan
+- Ask you to approve
+- Run the commands
+- Show the installed skills
+- You just click Approve whenever it asks.
 
-Ask you to approve
+### ⭐ What you should see after installation
 
-Run the commands
-
-Show the installed skills
-
-You just click Approve whenever it asks.
-
-⭐ What you should see after installation
-When Antigravity runs:
+#### When Antigravity runs:
 
 bash
+```
 agents-cli info
-You should see skills like:
+
+### You should see skills like:
 
 google-agents-cli-deploy
 
