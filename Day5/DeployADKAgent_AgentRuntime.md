@@ -573,7 +573,7 @@ Ready for deployment.
 
 If there are warnings or errors, Antigravity will highlight them and you can fix them before deploying.
 
-<img src=".././Images/expense_dryrun.png" width="500" height="300">
+<img src=".././Images/expense_dryrun.png" width="500" height="400">
 
 ---------------------------------------------------------------------------------
 
@@ -660,205 +660,169 @@ This URL is your public backend endpoint.
 
 You will use this in the next codelab to build your Manager Dashboard on Cloud Run.
 
-<img src=".././Images/deployment_status.png" width="600" height="300">
+<img src=".././Images/deployment_status.png" width="600" height="500">
 
 ---------------------------------------------------------------------------------------
 
 # 8. Test your Agent
-(Beginner‑friendly, GitHub‑ready explanation)
 
-Now that your agent is deployed to Agent Runtime, you should verify that it behaves correctly in production. You can test it in two ways:
+**Now that your agent is deployed to Agent Runtime, you should verify that it behaves correctly in production.**
 
-Directly through Antigravity (recommended)
-
-Manually through the Google Cloud Console Playground
-
+## You can test it in two ways:
+- Directly through Antigravity (recommended)
+- Manually through the Google Cloud Console Playground
 Both methods confirm that your workflow logic is functioning end‑to‑end.
 
-⭐ Option A — Test using Antigravity (recommended)
-Paste this into Antigravity (main chat):
-
-Code
+## ⭐ Option A — Test using Antigravity (recommended)
+- Paste this into Antigravity (main chat):
+```
 Test my deployed Agent Runtime engine with two test cases: first a standard
 meal expense of $50 to verify automatic approval, and second, a client dinner
 expense of $150 to verify that the human-in-the-loop pause is triggered.
-Antigravity will:
+```
 
-Detect your deployed endpoint
+## Antigravity will:
+- Detect your deployed endpoint
+- Send both test payloads
+- Show the responses
 
-Send both test payloads
-
-Show the responses
-
-If something fails, it will:
-
-Debug the issue
-
-Fix the code
-
-Redeploy automatically
-
+## If something fails, it will:
+- Debug the issue
+- Fix the code
+- Redeploy automatically
 This is the easiest and most automated way to test.
 
-⭐ Option B — Test manually in the Google Cloud Console
-If you prefer to test manually:
+## ⭐ Option B — Test manually in the Google Cloud Console
 
-1. Open the Playground
-Go to Google Cloud Console
+## If you prefer to test manually:
 
-Navigation menu → Agent Platform → Deployments
-
-Select your deployed agent
-
-Click Playground
-
+### 1. Open the Playground
+- Go to Google Cloud Console
+- Navigation menu → Agent Platform → Deployments
+- Select your deployed agent
+- Click Playground
 This opens an interactive chat interface for your agent.
 
-⭐ Test Case 1 — Auto‑Approval (< $100)
-Paste this JSON into the Playground:
+### ⭐ Test Case 1 — Auto‑Approval (< $100)
+- Paste this JSON into the Playground:
 
 json
+```
 {"data": {"amount": 50.0, "submitter": "user@example.com", "category": "meals", "description": "Lunch", "date": "2026-06-04"}}
-Expected behavior:
-The agent routes to auto_approve
+```
 
-Returns a JSON response with "status": "approved"
-
+### Expected behavior:
+- The agent routes to auto_approve
+- Returns a JSON response with "status": "approved"
 This confirms your deterministic Python node is working.
 
-⭐ Test Case 2 — Human‑in‑the‑Loop (≥ $100)
-Paste this JSON:
+### ⭐ Test Case 2 — Human‑in‑the‑Loop (≥ $100)
+- Paste this JSON:
 
 json
+```
 {"data": {"amount": 150.0, "submitter": "user@example.com", "category": "meals", "description": "Client dinner", "date": "2026-06-04"}}
-Expected behavior:
-The agent routes to review_agent
+```
 
-Triggers a RequestInput pause
+### Expected behavior:
+- The agent routes to review_agent
+- Triggers a RequestInput pause
+- The Playground UI will show a pending human decision
+- You will see a prompt asking for Approve or Reject
+- This confirms your HITL flow is functioning.
 
-The Playground UI will show a pending human decision
+### ⭐ What success looks like
 
-You will see a prompt asking for Approve or Reject
+#### For the $50 test:
 
-This confirms your HITL flow is functioning.
-
-⭐ What success looks like
-For the $50 test:
-Code
+```
 "status": "approved"
 "node": "auto_approve"
-For the $150 test:
-Code
+```
+#### For the $150 test:
+```
 "status": "pending_human_input"
 "node": "review_agent"
 "pause_reason": "RequestInput"
-Once you click Approve/Reject, the workflow resumes and completes.
+```
+**Once you click Approve/Reject, the workflow resumes and completes.**
 
-Image: payload_test
+<img src=".././Images/payload_test.png" width="600" height="500">
 
 -------------------------------------------------------------------------------------
 
 # 9. Monitor and Observe your Production Agent
-(Beginner‑friendly, GitHub‑ready explanation)
 
-Once your agent is deployed to Agent Runtime, Google Cloud automatically wires up full observability for you. You don’t need to add logging code or tracing hooks — it’s all built in.
+**Once your agent is deployed to Agent Runtime, Google Cloud automatically wires up full observability for you. You don’t need to add logging code or tracing hooks — it’s all built in.**
 
-Every time your agent:
-
-Receives an event
-
-Runs a node
-
-Calls a model
-
-Executes a tool
-
-Pauses for human input
-
-…Agent Runtime streams telemetry into your Google Cloud project.
-
+### Every time your agent:
+- Receives an event
+- Runs a node
+- Calls a model
+- Executes a tool
+- Pauses for human input
+- Agent Runtime streams telemetry into your Google Cloud project.
 This gives you deep visibility into your agent’s behavior in production.
 
-⭐ Where to Observe Your Agent
-You have three main observability tools:
+## ⭐ Where to Observe Your Agent
 
-1. Cloud Trace — Execution Maps & Latency
-Cloud Trace shows:
+### You have three main observability tools:
 
-End‑to‑end execution timelines
+### 1. Cloud Trace — Execution Maps & Latency
 
-Node‑by‑node spans
+### Cloud Trace shows:
+- End‑to‑end execution timelines
+- Node‑by‑node spans
+- Model latency
+- Tool execution time
+- Human‑in‑the‑loop pauses
+- Errors and retries
 
-Model latency
-
-Tool execution time
-
-Human‑in‑the‑loop pauses
-
-Errors and retries
-
-How to open Cloud Trace:
-Go to Google Cloud Console
-
-Navigation menu → Trace
-
-Select Trace Explorer
-
-You’ll see a waterfall diagram of your agent’s workflow.
-
+### How to open Cloud Trace:
+- Go to Google Cloud Console
+- Navigation menu → Trace
+- Select Trace Explorer
+- You’ll see a waterfall diagram of your agent’s workflow.
 This is incredibly useful for debugging slow model calls or verifying routing logic.
 
-2. Cloud Logging — Real‑Time Logs
-Cloud Logging shows:
+### 2. Cloud Logging — Real‑Time Logs
 
-Standard output
+### Cloud Logging shows:
+- Standard output
+- Python print statements
+- Errors and stack traces
+- Tool call logs
+- Request/response payloads
+- Approval decisions
 
-Python print statements
+### How to open Cloud Logging:
+- Google Cloud Console
+- Navigation menu → Logging → Logs Explorer
 
-Errors and stack traces
-
-Tool call logs
-
-Request/response payloads
-
-Approval decisions
-
-How to open Cloud Logging:
-Google Cloud Console
-
-Navigation menu → Logging → Logs Explorer
-
-Filter by:
-
-resource.type="agentruntime.googleapis.com/AgentEngine"
-
-or your deployment name
-
+### Filter by:
+- resource.type="agentruntime.googleapis.com/AgentEngine"
+- or your deployment name
 You can watch logs stream in real time as you test your agent.
 
-3. BigQuery Analytics (Optional)
-If you enabled:
+### 3. BigQuery Analytics (Optional)
 
-Code
+#### If you enabled:
+```
 --bq-analytics
+```
 during scaffolding, your agent’s interactions are automatically written to BigQuery.
 
-This lets you run SQL queries to analyze:
+#### This lets you run SQL queries to analyze:
+- Approval ratios
+- Rejection trends
+- Expense categories
+- Model usage
+- Human‑in‑the‑loop frequency
+- Session lengths
 
-Approval ratios
-
-Rejection trends
-
-Expense categories
-
-Model usage
-
-Human‑in‑the‑loop frequency
-
-Session lengths
-
-Example SQL (from the codelab)
+### Example SQL (from the codelab)
 sql
+```
 SELECT
   COUNTIF(REGEXP_CONTAINS(response_text, r'(?i)approved')) AS approved_count,
   COUNTIF(REGEXP_CONTAINS(response_text, r'(?i)rejected')) AS rejected_count,
@@ -868,46 +832,37 @@ FROM
   `[YOUR_PROJECT_ID].[YOUR_DATASET_ID].v_agent_response`
 WHERE
   agent = 'expense_processor';
+```
 You can ask Antigravity to customize this query for your dataset.
 
-⭐ What You Should Expect to See
-For a $50 expense:
-Auto‑approval node executes
+### ⭐ What You Should Expect to See
 
-Trace shows a short workflow
+#### For a $50 expense:
+- Auto‑approval node executes
+- Trace shows a short workflow
+- Logs show "status": "approved"
 
-Logs show "status": "approved"
-
-For a $150 expense:
-Workflow pauses at review_agent
-
-Trace shows a RequestInput span
-
-Logs show "pending_human_input"
-
-BigQuery logs a HITL event (if enabled)
-
-Image - 
+#### For a $150 expense:
+- Workflow pauses at review_agent
+- Trace shows a RequestInput span
+- Logs show "pending_human_input"
+- BigQuery logs a HITL event (if enabled)
 
 --------------------------------------------------------------------------------
 # 10. (Optional) Verify Registration in Agent Registry
+
 Your Ambient Expense Agent is now deployed to Agent Runtime, and one of the perks of using Agent Runtime is that your agent is automatically registered in the Gemini Enterprise Agent Registry.
 
-This registry is what allows:
-
-Other developers
-
-Other services
-
-Other agents
-
-Internal enterprise systems
-
+### This registry is what allows:
+- Other developers
+- Other services
+- Other agents
+- Internal enterprise systems
 …to discover, inspect, and reuse your agent safely.
 
-You don’t need to manually publish anything — Agent Runtime handles it for you.
+**You don’t need to manually publish anything — Agent Runtime handles it for you.**
 
-⭐ Why This Matters
+## ⭐ Why This Matters
 Once registered, your agent becomes:
 
 Discoverable across your organization
