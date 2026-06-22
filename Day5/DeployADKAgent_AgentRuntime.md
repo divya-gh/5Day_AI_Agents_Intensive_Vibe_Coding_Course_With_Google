@@ -341,84 +341,71 @@ an ADK agent. Run "uvx google-agents-cli setup", then confirm with
 bash
 ```
 agents-cli info
+```
 
 ### You should see skills like:
-
-google-agents-cli-deploy
-
-google-agents-cli-workflow
-
-google-agents-cli-eval
-
-adk-cheatsheet
-
-adk-scaffold
-
+- google-agents-cli-deploy
+- google-agents-cli-workflow
+- google-agents-cli-eval
+- adk-cheatsheet
+- adk-scaffold
 This confirms everything is installed correctly.
 
-⭐ Notes from the codelab (in simple terms)
-✔ Antigravity may show a plan before running commands
+### ⭐ Notes from the codelab (in simple terms)
+#### ✔ Antigravity may show a plan before running commands
 Just click Approve.
 
-✔ If you hit quota
+#### ✔ If you hit quota
 Switch to another model inside Antigravity (Gemini 2.0 Flash, Flash Lite, etc.)
 
-✔ You only need to install Agents CLI once
+#### ✔ You only need to install Agents CLI once
 After that, Antigravity remembers the skills.
 
 --------------------------------------------------------------------------------------
 
 # ⭐ 4. Create your agent project
-Now that:
 
-Your Google Cloud environment is configured
+#### Now that:
+- Your Google Cloud environment is configured
+- Your Agents CLI + ADK skills are installed
+- Antigravity is fully equipped
+- …you’re ready to scaffold a brand‑new Ambient Expense Agent that is fully compatible with ADK 2.0.
 
-Your Agents CLI + ADK skills are installed
+### This step generates:
+- A complete ADK 2.0 project folder
+- A graph workflow with nodes
+- A auto_approve node for < $100
+- A review_agent node that triggers a RequestInput pause for ≥ $100
+- A runnable prototype you can deploy later
 
-Antigravity is fully equipped
-
-…you’re ready to scaffold a brand‑new Ambient Expense Agent that is fully compatible with ADK 2.0.
-
-This step generates:
-
-A complete ADK 2.0 project folder
-
-A graph workflow with nodes
-
-A auto_approve node for < $100
-
-A review_agent node that triggers a RequestInput pause for ≥ $100
-
-A runnable prototype you can deploy later
-
-⭐ Where to paste the prompt
-👉 Paste the prompt inside the main Antigravity chat window (Antigravity 2.0)  
-NOT the IDE.
-
-This is the same place you pasted Steps 2 and 3.
-
-⭐ The exact prompt to paste
+### ⭐ The exact prompt to paste
 Code
+```
 Use Agents CLI to build a local prototype for an ambient expense agent that
 streamlines employee expense reporting by instantly approving standard claims
 while flagging larger expenses for review. Ensure the graph workflow is
 compatible with ADK 2.0 and includes an `auto_approve` node that automatically
 approves expenses under $100, and a `review_agent` node that triggers a
 human-in-the-loop pause (`RequestInput`) for expenses of $100 or more.
-⭐ What Antigravity will do behind the scenes
-When you paste that prompt, Antigravity will:
+```
 
-1. Propose an implementation plan
+## ⭐ What Antigravity will do behind the scenes
+
+### When you paste that prompt, Antigravity will:
+
+### 1. Propose an implementation plan
 You click Approve.
 
-2. Run the scaffold command
-Equivalent to:
+### 2. Run the scaffold command
+**Equivalent to:**
 
 bash
+```
 agents-cli scaffold create expense-agent --adk
-This generates a folder like:
+```
 
-Code
+#### This generates a folder like:
+```
 expense-agent/
   app/
     agent.py
@@ -426,301 +413,254 @@ expense-agent/
     tools/
   pyproject.toml
   README.md
-3. Modify the generated workflow
-Antigravity will:
+```
 
-Ensure the workflow uses ADK 2.0 graph syntax
+### 3. Modify the generated workflow
 
-Add an auto_approve node:
+**Antigravity will:**
+- Ensure the workflow uses ADK 2.0 graph syntax
+- Add an auto_approve node:
+- Runs deterministic Python
+- Approves expenses < $100
 
-Runs deterministic Python
+#### Add a review_agent node:
+- Calls Gemini
+- Triggers RequestInput for human review
 
-Approves expenses < $100
+#### Wire the edges correctly:
+- start → auto_approve
+- auto_approve → end (if < $100)
+- auto_approve → review_agent (if ≥ $100)
+- review_agent → end (after human decision)
 
-Add a review_agent node:
+### 4. Show you the generated code
 
-Calls Gemini
-
-Triggers RequestInput for human review
-
-Wire the edges correctly:
-
-start → auto_approve
-
-auto_approve → end (if < $100)
-
-auto_approve → review_agent (if ≥ $100)
-
-review_agent → end (after human decision)
-
-4. Show you the generated code
-Antigravity will open the IDE panel and display:
-
-The workflow graph
-
-The node implementations
-
-The routing logic
-
-The human‑in‑the‑loop pause
-
+### Antigravity will open the IDE panel and display:
+- The workflow graph
+- The node implementations
+- The routing logic
+- The human‑in‑the‑loop pause
 You can ask Antigravity to explain any part of the code.
-
-⭐ If you already built a custom agent on Day 4
-You can skip this step and use your existing repo.
-
-But since you said earlier that your old project is gone and only on GitHub, it’s easier to let Antigravity scaffold a fresh one.
 
 -------------------------------------------------------------------------------
 
 # 5. Prepare for Production Deployment
 
-Now that your Ambient Expense Agent works locally, it’s time to prepare it for Agent Runtime, Google Cloud’s fully managed hosting environment for AI agents.
+**Now that your Ambient Expense Agent works locally, it’s time to prepare it for Agent Runtime, Google Cloud’s fully managed hosting environment for AI agents.**
 
-This step upgrades your local project so it can be deployed as a production‑grade cloud service.
+##### This step upgrades your local project so it can be deployed as a production‑grade cloud service.
 
-⭐ Why Deploy to Agent Runtime?
-Local agents (running on your laptop):
+## ⭐ Why Deploy to Agent Runtime?
+- Local agents (running on your laptop):
+- Stop running when you close your machine
+- Have no persistent memory
+- Cannot be accessed by a frontend
+- Cannot scale
+- Cannot be monitored
+- Agent Runtime solves all of this by giving you:
 
-Stop running when you close your machine
-
-Have no persistent memory
-
-Cannot be accessed by a frontend
-
-Cannot scale
-
-Cannot be monitored
-
-Agent Runtime solves all of this by giving you:
-
-✔ Always‑on execution
+### ✔ Always‑on execution
 Your agent runs 24/7 in Google Cloud.
 
-✔ Managed stateful sessions
+### ✔ Managed stateful sessions
 Agent Runtime stores conversation state and long‑term memory.
 
-✔ Secure sandboxing
+### ✔ Secure sandboxing
 Tool calls and code execution happen in isolated environments.
 
-✔ Enterprise observability
+### ✔ Enterprise observability
 Telemetry streams automatically to Cloud Trace and Cloud Logging.
 
-✔ A public endpoint
+### ✔ A public endpoint
 Your frontend (Cloud Run dashboard) will call this endpoint in the next codelab.
 
-⭐ What This Step Does
+## ⭐ What This Step Does
 You will ask Antigravity to enhance your local project with production deployment files.
 
-This adds:
+## This adds:
 
-1. app/agent_runtime_app.py
+### 1. app/agent_runtime_app.py
 A production‑ready wrapper that exposes your agent as a cloud service.
 
-2. deployment_metadata.json
+### 2. deployment_metadata.json
 A schema that tells Agent Runtime how to provision resources.
 
-3. No changes to your core logic
+### 3. No changes to your core logic
 Your app/agent.py stays exactly the same.
 
-⭐ What You Need to Do
-Paste this prompt into Antigravity (main chat):
+### ⭐ What You Need to Do
 
-Code
+#### Paste this prompt into Antigravity (main chat):
+
+```
 Scaffold the production deployment files for Agent Runtime.
-Antigravity will:
+```
 
-Show an implementation plan
+### Antigravity will:
+- Show an implementation plan
+- Ask you to approve
 
-Ask you to approve
+### Run the command:
 
-Run the command:
-
-Code
+```
 agents-cli scaffold enhance --deployment-target agent_runtime --yes
-Generate the production files
+```
 
-Show them in the IDE panel
+- Generate the production files
+- Show them in the IDE panel
 
 -----------------------------------------------------------------------------------
 
 # 6. Packaging and Local Verification
-(Beginner‑friendly, GitHub‑ready explanation)
 
-Before you deploy your agent to Agent Runtime, you need to:
+## Before you deploy your agent to Agent Runtime, you need to:
+- Lock your Python dependencies
+- Run a dry‑run deployment to catch issues early
+- This prevents version drift, dependency conflicts, and misconfigured deployment metadata.
+- Antigravity handles all of this for you with a single prompt.
 
-Lock your Python dependencies
+## ⭐ What this step does
 
-Run a dry‑run deployment to catch issues early
+### 1. uv lock
 
-This prevents version drift, dependency conflicts, and misconfigured deployment metadata.
+### This creates a deterministic lockfile (like uv.lock), ensuring:
+- The exact same package versions run locally and in the cloud
+- No surprises during deployment
+- Reproducible builds
 
-Antigravity handles all of this for you with a single prompt.
+### 2. agents-cli deploy --dry-run
+- This simulates a deployment without uploading anything.
 
-⭐ What this step does
-1. uv lock
-This creates a deterministic lockfile (like uv.lock), ensuring:
-
-The exact same package versions run locally and in the cloud
-
-No surprises during deployment
-
-Reproducible builds
-
-2. agents-cli deploy --dry-run
-This simulates a deployment without uploading anything.
-
-It checks:
-
-Your project structure
-
-Your deployment metadata
-
-Your Python environment
-
-Your dependencies
-
-Your Agent Runtime wrapper
-
-Your ADK graph validity
-
+### It checks:
+- Your project structure
+- Your deployment metadata
+- Your Python environment
+- Your dependencies
+- Your Agent Runtime wrapper
+- Your ADK graph validity
 If something is wrong, you’ll see it here — before wasting time on a real deployment.
 
-⭐ What you need to do
-Paste this into Antigravity (main chat):
+### ⭐ What you need to do
+- Paste this into Antigravity (main chat):
 
-Code
+```
 Lock my python dependencies and run a dry-run deployment to check for any
 configuration or dependency issues.
-Antigravity will:
+```
 
-Show an implementation plan
+### Antigravity will:
+- Show an implementation plan
+- Ask you to approve
 
-Ask you to approve
-
-Run:
-
-Code
+### Run:
+```
 uv lock
-Then run:
+```
 
-Code
+### Then run:
+```
 agents-cli deploy --dry-run
+```
 Show the dry‑run output in the terminal panel
 
-⭐ What you should see
-A successful dry‑run ends with something like:
+### ⭐ What you should see
 
-Code
-Dry-run complete. No issues detected.
+#### A successful dry‑run ends with something like:
+
+```Dry-run complete. No issues detected.
 Ready for deployment.
+```
+
 If there are warnings or errors, Antigravity will highlight them and you can fix them before deploying.
 
-Image - expense_dryrun
+<img src=".././Images/expense_dryrun.png" width="500" height="300">
 
 ---------------------------------------------------------------------------------
 
 # 7. Deploy to Agent Runtime
-(Beginner‑friendly, GitHub‑ready explanation)
 
-Now that your project is:
-
-Scaffolded
-
-Enhanced for production
-
-Locked with deterministic dependencies
-
-Successfully dry‑run tested
-
+## Now that your project is:
+- Scaffolded
+- Enhanced for production
+- Locked with deterministic dependencies
+- Successfully dry‑run tested
 …you’re ready to deploy your Ambient Expense Agent to Agent Runtime.
 
-This step turns your local agent into a fully managed, always‑on cloud service with a public endpoint.
+**This step turns your local agent into a fully managed, always‑on cloud service with a public endpoint.**
 
-⭐ What this step does
-When you ask Antigravity to deploy:
+## ⭐ What this step does
 
-It activates the google‑agents‑cli‑deploy skill
+### When you ask Antigravity to deploy:
+- It activates the google‑agents‑cli‑deploy skill
 
-It runs the deployment command:
-
-Code
+### It runs the deployment command:
+```
 agents-cli deploy --project YOUR_PROJECT_ID --region us-west1
-It packages your code
-
-Uploads it to Google Cloud
-
-Provisions an Agent Runtime instance
-
-Streams logs and progress in the terminal
-
-Finally prints your live endpoint URL
-
+```
+- It packages your code
+- Uploads it to Google Cloud
+- Provisions an Agent Runtime instance
+- Streams logs and progress in the terminal
+- Finally prints your live endpoint URL
 This process usually takes 5–10 minutes.
 
-⭐ What you need to do
-Paste this into Antigravity (main chat):
+## ⭐ What you need to do
+- Paste this into Antigravity (main chat):
 
-Code
+```
 Deploy this agent to Agent Runtime.
-Antigravity will:
+```
 
-Show an implementation plan
+### Antigravity will:
+- Show an implementation plan
+- Ask you to approve
+- Run the deployment
+- Stream progress
+- Display your live endpoint when done
+- You just approve each step.
 
-Ask you to approve
-
-Run the deployment
-
-Stream progress
-
-Display your live endpoint when done
-
-You just approve each step.
-
-⭐ Optional: Avoid locking your terminal
-If you don’t want to wait in the terminal, you can tell Antigravity:
-
-Code
+### ⭐ Optional: Avoid locking your terminal
+**If you don’t want to wait in the terminal, you can tell Antigravity:**
+```
 Deploy this agent to Agent Runtime using the --no-wait flag.
-This runs:
+```
 
-Code
+### This runs:
+```
 agents-cli deploy --project YOUR_PROJECT_ID --region us-west1 --no-wait
-Then later you can check status:
+```
 
-Code
+#### Then later you can check status:
+```
 agents-cli deploy --status
-⭐ Region Troubleshooting Tip
-If deployment fails due to capacity or quota, try another region:
+```
 
-us-central1
+### ⭐ Region Troubleshooting Tip
 
-us-east1
+#### If deployment fails due to capacity or quota, try another region:
+- us-central1
+- us-east1
+- us-west4
+- europe-west1
 
-us-west4
+#### The Google Cloud Region Picker can help you choose based on:
+- Latency
+- Price
+- Carbon footprint
 
-europe-west1
+## ⭐ What you should see at the end
 
-The Google Cloud Region Picker can help you choose based on:
-
-Latency
-
-Price
-
-Carbon footprint
-
-⭐ What you should see at the end
-A successful deployment ends with something like:
-
-Code
+### A successful deployment ends with something like:
+```
 Deployment complete.
 Your agent is now live at:
 https://agent-runtime-xxxxxx-uc.a.run.app
 This URL is your public backend endpoint.
+```
 
 You will use this in the next codelab to build your Manager Dashboard on Cloud Run.
 
-Image - deployment_status
+<img src=".././Images/deployment_status.png" width="600" height="300">
 
 ---------------------------------------------------------------------------------------
 

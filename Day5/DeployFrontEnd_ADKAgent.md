@@ -850,7 +850,8 @@ Use gcloud commands with --quiet to execute the cleanup. Walk me through what yo
 - Pub/Sub topics
 - Service account
 - Confirm when everything is removed
-If you also ask it to delete the agent, it will decommission your Agent Runtime instance as well.
+
+**If you also ask it to delete the agent, it will decommission your Agent Runtime instance as well.**
 
 ## Step 4 — Verify Cleanup (Optional)
 
