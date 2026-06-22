@@ -1,4 +1,4 @@
-🚀 What is Antigravity? 
+# 🚀 What is Antigravity? 
 #### Antigravity is Google’s agentic development platform — a full ecosystem designed for building, running, orchestrating, and managing AI agents locally on your machine.
 
 ### A “central command center” for AI agents
