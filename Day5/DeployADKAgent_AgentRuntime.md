@@ -863,91 +863,72 @@ Your Ambient Expense Agent is now deployed to Agent Runtime, and one of the perk
 **You don’t need to manually publish anything — Agent Runtime handles it for you.**
 
 ## ⭐ Why This Matters
-Once registered, your agent becomes:
 
-Discoverable across your organization
-
-Version‑tracked
-
-Governed under enterprise policies
-
-Reusable by other teams
-
-Visible in the Agent Registry UI
-
+### Once registered, your agent becomes:
+- Discoverable across your organization
+- Version‑tracked
+- Governed under enterprise policies
+- Reusable by other teams
+- Visible in the Agent Registry UI
 This is especially important in enterprise environments where multiple teams build agents that need to interoperate.
 
-⭐ What You Need to Do
-Paste this into Antigravity (main chat):
-
-Code
+## ⭐ What You Need to Do
+- Paste this into Antigravity (main chat):
+```
 Verify that my deployed expense agent is automatically registered in the Gemini
 Enterprise Agent Registry.
-Antigravity will:
+```
 
-Show an implementation plan
+## Antigravity will:
+- Show an implementation plan
+- Ask you to approve
 
-Ask you to approve
+## Run the command:
 
-Run the command:
-
-Code
+```
 agents-cli publish gemini-enterprise --list
-Display a list of all registered agents in your project
+```
+- Display a list of all registered agents in your project
+- Confirm that your Ambient Expense Agent appears in the registry
 
-Confirm that your Ambient Expense Agent appears in the registry
+### You should see an entry with:
 
-You should see an entry with:
-
-Your agent’s name (e.g., expense-agent or expense_processor)
-
-Its version
-
-Its deployment metadata
-
-Its registration status
-
+- Your agent’s name (e.g., expense-agent or expense_processor)
+- Its version
+- Its deployment metadata
+- Its registration status
 This confirms your agent is discoverable and ready for enterprise use.
 
-⭐ What Success Looks Like
-You’ll see something like:
+## ⭐ What Success Looks Like
 
-Code
+### You’ll see something like:
+
+``
 Registered Gemini Enterprise Agents:
 - expense_processor (active)
 - version: 1
 - runtime: agent_runtime
 - project: divya-doc-pipeline
-This means:
+```
 
-Your agent is live
-
-Registered
-
-Discoverable
-
-Synced with Agent Runtime
-
+#### This means:
+- Your agent is live
+- Registered
+- Discoverable
+- Synced with Agent Runtime
 Any future deployments will automatically update this registry entry.
 
-⭐ You’ve Now Completed the Entire Backend Codelab
-You have:
+## ⭐ You’ve Now Completed the Entire Backend Codelab
 
-Built an ADK 2.0 agent
-
-Added HITL logic
-
-Prepared it for production
-
-Deployed it
-
-Tested it
-
-Observed it
-
-Verified registry registration
-
+### You have:
+- Built an ADK 2.0 agent
+- Added HITL logic
+- Prepared it for production
+- Deployed it
+- Tested it
+- Observed it
+- Verified registry registration
 You’re officially ready for the next codelab:
 
-Image - 
+
 
